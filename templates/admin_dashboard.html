@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+    <h2>Admin Dashboard</h2>
+    <p>Welcome, Administrator. From here you can manage the game's users and settings.</p>
+    <a href="{{ url_for('list_users') }}">Manage Users</a>
+{% endblock %}

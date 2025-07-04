@@ -399,4 +399,27 @@ Quests will be divided into three categories: main quests, side quests, and dail
 
 Quest items will be converted to character flags on acquisition, ensuring that quest items do not take up inventory space. Additionally, quest items will be automatically removed from the player's inventory when the quest is completed, allowing players to focus on their current objectives without cluttering their inventory with quest-related items. In the case of manufactured quest items, they will convert to inventory items upon completion of the quest, allowing players to keep the item for future use or trade.
 
+## Currency and Economy
+“Chronite glows faintly when near temporal rifts. Some say it was once part of the Vrathan’s loom.” – Marta Hahland 
 
+The game will have a currency system that will be used to buy and sell items, equipment, and schematics. The currency system will include both a base currency only and will only be used for p2p transactions and trades and costs of renting "crafting" stations.
+
+The in-game currency will be called Chronite (CRN) and is an era-agnostic currency. It will be used to buy and sell items, equipment, and schematics. Players will be able to earn Chronite by completing quests, defeating monsters, and selling items to vendors or other players.
+Additionally, players will be able to trade items and equipment with each other using Chronite as the currency. The economy will be player-driven, with players setting the prices for items and equipment based on supply and demand.
+
+The game will include a coin sink to help balance the economy and prevent inflation. The coin sink will include:
+*   **Repair Costs:** Players will need to pay a fee to repair their equipment, which will help to remove excess currency from the economy.
+*   **Crafting Costs:** Players will need to pay a fee to craft new equipment, which will help to remove excess currency from the economy.
+*   **Trading Costs:** Players will need to pay a fee to trade items and equipment with each other.
+*   **Auction House Fees:** Players will need to pay a fee to list items for sale in the auction house, which will help to remove excess currency from the economy.
+*   **Guild Fees:** Players will need to pay a fee to create or maintain a guild, which will help to remove excess currency from the economy. Additionally, guilds will be able to set a small fee for using their guild's crafting stations
+
+### Obtaining CRN
+  **Monster Loot:** Every monster drops Chronite and loot based on its level and rarity.
+  Common: 3–5 CRN
+  Uncommon: 5–10 CRN
+  Rare: 10–30 CRN
+  Elite: 30–55 CRN
+  Legendary: 55–75 CRN
+
+  **Daily Monster Quotas:** Players can complete daily kill lists for bonus Chronite (e.g., “Slay 10 Elite Chrono-Mummies”).

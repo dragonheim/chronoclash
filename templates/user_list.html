@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+
+{% block title %}User Management{% endblock %}
+
+{% block content %}
+    <h2>User Management</h2>
+    <a href="{{ url_for('admin_dashboard') }}">&larr; Back to Admin Dashboard</a>
+    <hr>
+    <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 1em;">
+        <thead>
+            <tr style="background-color: #f2f2f2; text-align: left;">
+                <th style="padding: 8px;">ID</th>
+                <th style="padding: 8px;">Username</th>
+                <th style="padding: 8px;">Role</th>
+                <th style="padding: 8px;">Status</th>
+                <th style="padding: 8px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td style="padding: 8px;">{{ user.id }}</td>
+                <td style="padding: 8px;">{{ user.username }}</td>
+                <td style="padding: 8px;">{% if user.role == 0 %}Admin{% elif user.role == 10 %}GM{% else %}Player{% endif %}</td>
+                <td style="padding: 8px;">
+                    {% if user.is_locked %}<b>Permanently Locked</b>{% elif user.lockout_until and (user.lockout_until > now) %}Temporarily Locked{% else %}Active{% endif %}
+                </td>
+                <td style="padding: 8px;">
+                    {% if user.is_locked or (user.lockout_until and (user.lockout_until > now)) %}
+                    <form method="post" action="{{ url_for('unlock_user', user_id=user.id) }}"><input type="submit" value="Unlock" style="cursor: pointer;"></form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

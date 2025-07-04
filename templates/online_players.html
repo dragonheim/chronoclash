@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+{% block title %}Online Players{% endblock %}
+
+{% block content %}
+    <h2>Online Players</h2>
+    <a href="{{ url_for('gm_dashboard') }}">&larr; Back to GM Dashboard</a>
+    <hr>
+    {% if players %}
+    <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 1em;">
+        <thead>
+            <tr style="background-color: #f2f2f2; text-align: left;">
+                <th style="padding: 8px;">Name</th>
+                <th style="padding: 8px;">Zone</th>
+                <th style="padding: 8px;">Level</th>
+                <th style="padding: 8px;">Class</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for player in players %}
+            <tr>
+                <td style="padding: 8px;">{{ player.name }}</td>
+                <td style="padding: 8px;">{{ player.zone }}</td>
+                <td style="padding: 8px;">{{ player.level }}</td>
+                <td style="padding: 8px;">{{ player.class }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No players are currently online, or the game server is unreachable.</p>
+    {% endif %}
+{% endblock %}

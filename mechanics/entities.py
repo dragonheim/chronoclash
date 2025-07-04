@@ -1,0 +1,310 @@
+import math
+from .constants import *
+from .effects import Effect
+from .equipment import Equipment
+
+
+class Character:
+    def __init__(self, name, time_period, archetype, char_class_name="DefaultClass"):
+        self.name = name
+        self.time_period = time_period
+        self.archetype = archetype # "Tank", "DPS", "Healer"
+        self.char_class_name = char_class_name # Specific class name like "Flameblade"
+
+        self.character_level = 1
+        self.class_level = 1 # For single class, this is same as character_level
+
+        self.primary_attributes = {attr: 10 for attr in PRIMARY_ATTRIBUTES_LIST}
+        self._apply_time_period_mods()
+
+        self.equipment = {
+            "weapon": None,
+            "armor_body": None,
+            "accessory1": None,
+            "accessory2": None
+        }
+
+        self.secondary_attributes = {}
+        self.tertiary_attributes = {}
+        self.active_effects = []
+        self.is_in_combat = False
+        self.combat_target = None
+
+        # Set current resource pools
+        self.recalculate_all_stats()
+
+    def _apply_time_period_mods(self):
+        if self.time_period in TIME_PERIOD_ADJUSTMENTS:
+            for attr, mod in TIME_PERIOD_ADJUSTMENTS[self.time_period].items():
+                self.primary_attributes[attr] += mod
+
+    def _calculate_secondary_attributes(self):
+        base_secondary = {}
+        for sec_attr, primaries in SECONDARY_ATTRIBUTES_DEF.items():
+            pa_val = self.primary_attributes[primaries["a"]]
+            pb_val = self.primary_attributes[primaries["b"]]
+            pc_val = self.primary_attributes[primaries["c"]]
+            base_secondary[sec_attr] = (pa_val / 2.0) + (pb_val / 4.0) + (pc_val / 4.0)
+
+        # Apply flat bonuses from equipment to secondary attributes
+        for item in self.equipment.values():
+            if item:
+                for stat, value in item.bonuses.items():
+                    if stat in base_secondary:
+                        base_secondary[stat] += value
+
+        # Apply active spell effects (buffs/debuffs) to secondary attributes
+        # These effects are applied to the base calculated values.
+        current_secondary_with_effects = base_secondary.copy()
+        for effect in self.active_effects:
+            if effect.target_attribute in current_secondary_with_effects:
+                if effect.modifier_type == "percentage":
+                    # Apply percentage to the current value of the attribute
+                    current_secondary_with_effects[effect.target_attribute] *= (1 + effect.value / 100.0)
+                elif effect.modifier_type == "flat":
+                    current_secondary_with_effects[effect.target_attribute] += effect.value
+        
+        # Ensure non-negative values after effects
+        for attr in current_secondary_with_effects:
+            current_secondary_with_effects[attr] = max(0, current_secondary_with_effects[attr])
+        
+        self.secondary_attributes = current_secondary_with_effects
+
+
+    def _calculate_tertiary_attributes(self):
+        calculated_tertiary = {}
+        if self.archetype not in TERTIARY_ARCHETYPE_FORMULAS:
+            print(f"Warning: Archetype {self.archetype} not found in TERTIARY_ARCHETYPE_FORMULAS. Using default empty tertiary stats.")
+            self.tertiary_attributes = {}
+            return
+
+        formulas = TERTIARY_ARCHETYPE_FORMULAS[self.archetype]
+        for tert_stat_name, (coeff, rel_sec_stat_name) in formulas.items():
+            secondary_value = self.secondary_attributes.get(rel_sec_stat_name, 0)
+            calculated_tertiary[tert_stat_name] = (coeff * self.class_level) + secondary_value
+
+        # Apply flat bonuses from equipment to tertiary attributes
+        for item in self.equipment.values():
+            if item:
+                for stat, value in item.bonuses.items():
+                    if stat in calculated_tertiary:
+                        calculated_tertiary[stat] += value
+                    # Handle Armor specifically, as it's only from equipment
+                    elif stat == "Armor":
+                        calculated_tertiary[stat] = calculated_tertiary.get(stat, 0) + value
+        
+        # Armor is from equipment only (not implemented in this script version)
+        calculated_tertiary["Armor"] = calculated_tertiary.get("Armor", 0) 
+
+        self.tertiary_attributes = calculated_tertiary
+
+
+    def recalculate_all_stats(self):
+        """Recalculates all secondary and tertiary stats."""
+        self._calculate_secondary_attributes()  # Effects are applied inside here
+        self._calculate_tertiary_attributes()
+        # On stat change, reset current HP/Mana to new max for simplicity.
+        self.current_hp = self.tertiary_attributes.get("HP", 0)
+        self.current_mana = self.tertiary_attributes.get("Mana", 0)
+
+    def allocate_primary_points(self, points_to_allocate, max_per_attr, allocations):
+        """Allocations is a dict like {'Strength': 2, 'Agility': 1}"""
+        if not allocations:
+            print("No allocations provided.")
+            return True # Technically not an error if 0 points to allocate and 0 allocated
+
+        allocated_total = sum(allocations.values())
+        if allocated_total > points_to_allocate:
+            print(f"Error: Tried to allocate {allocated_total} points, but only {points_to_allocate} are available.")
+            return False
+            
+        temp_primary_attributes = self.primary_attributes.copy()
+        for attr, val in allocations.items():
+            if val < 0:
+                print(f"Error: Cannot allocate negative points to {attr}.")
+                return False
+            if val > max_per_attr:
+                print(f"Error: Cannot allocate more than {max_per_attr} points to {attr} in this allocation.")
+                return False
+            if attr not in temp_primary_attributes:
+                print(f"Error: Invalid attribute {attr}.")
+                return False
+            temp_primary_attributes[attr] += val
+        
+        self.primary_attributes = temp_primary_attributes
+        # print(f"Allocated {allocations}. New Primary Attributes: {self.primary_attributes}")
+        self.recalculate_all_stats()
+        return True
+
+    def level_up(self, primary_allocations=None):
+        if self.character_level >= MAX_LEVEL:
+            print(f"{self.name} is already at max level ({MAX_LEVEL}).")
+            return False
+
+        self.character_level += 1
+        self.class_level += 1 # Assuming single class for now
+        print(f"\n>>> {self.name} leveled up to Level {self.character_level}! <<<")
+
+        if primary_allocations:
+            if not self.allocate_primary_points(LEVEL_UP_ATTRIBUTE_POINTS, MAX_LEVEL_UP_ALLOCATION_PER_ATTRIBUTE, primary_allocations):
+                # Revert level up if allocation fails
+                self.character_level -=1
+                self.class_level -=1
+                print(f"Level up to {self.character_level+1} failed due to invalid point allocation. Reverting.")
+                self.recalculate_all_stats() # Recalculate with old level stats
+                return False
+        else:
+            print(f"Gained {LEVEL_UP_ATTRIBUTE_POINTS} attribute points to distribute (no auto-allocation).")
+        
+        self.recalculate_all_stats() # Recalculate after successful level up and point allocation
+        return True
+
+    def equip_item(self, item: Equipment):
+        """Equips an item to the appropriate slot and recalculates stats."""
+        if item.slot not in self.equipment:
+            print(f"Error: Invalid equipment slot '{item.slot}'.")
+            return
+        if self.equipment[item.slot]:
+            print(f"Unequipping {self.equipment[item.slot].name} from {item.slot}.")
+        self.equipment[item.slot] = item
+        print(f"Equipped {item.name} to {item.slot}.")
+        self.recalculate_all_stats()
+
+    def unequip_item(self, slot):
+        """Unequips an item from a slot and recalculates stats."""
+        if slot not in self.equipment:
+            print(f"Error: Invalid equipment slot '{slot}'.")
+            return
+        if not self.equipment[slot]:
+            print(f"No item equipped in {slot}.")
+            return
+        
+        item_name = self.equipment[slot].name
+        self.equipment[slot] = None
+        print(f"Unequipped {item_name} from {slot}.")
+        self.recalculate_all_stats()
+
+    def apply_effect(self, effect: Effect):
+        # Remove existing effects with the same name to prevent simple stacking (implement stacking rules if needed)
+        self.active_effects = [e for e in self.active_effects if e.name != effect.name]
+        # Add a new instance of the effect to ensure its duration is reset
+        new_effect_instance = Effect(effect.name, effect.target_attribute, effect.modifier_type, effect.value, effect.duration_ticks)
+        self.active_effects.append(new_effect_instance)
+        print(f"Applied {new_effect_instance}")
+        self.recalculate_all_stats()
+
+    def tick_effects(self):
+        print("\n--- Ticking effects ---")
+        effects_expired_this_tick = False
+        new_active_effects_list = []
+        for effect in self.active_effects:
+            effect.remaining_ticks -= 1
+            if effect.remaining_ticks > 0:
+                new_active_effects_list.append(effect)
+                # print(f"  {effect.name} has {effect.remaining_ticks} ticks left.")
+            else:
+                print(f"  Effect {effect.name} has EXPIRED.")
+                effects_expired_this_tick = True
+        
+        self.active_effects = new_active_effects_list
+        if effects_expired_this_tick:
+            print("  Recalculating stats due to effect expiration.")
+            self.recalculate_all_stats()
+        elif not self.active_effects:
+            print("  No active effects remaining.")
+        else:
+            print("  Remaining active effects:")
+            for eff in self.active_effects: print(f"    {eff}")
+        print("--- End Ticking effects ---")
+
+    def display_stats(self, title="Character Stats"):
+        print(f"\n--- {title}: {self.name} (Lvl {self.character_level} {self.time_period} {self.archetype} {self.char_class_name}) ---")
+        print("Primary Attributes:")
+        for attr, val in self.primary_attributes.items():
+            print(f"  {attr:<15}: {val}")
+        print("Secondary Attributes (Calculated, with effects):")
+        for attr, val in self.secondary_attributes.items():
+            print(f"  {attr:<15}: {val:.2f}")
+        print("Tertiary Attributes (Calculated):")
+        for attr, val in self.tertiary_attributes.items():
+            print(f"  {attr:<15}: {val:.2f}")
+        print("Equipment:")
+        for slot, item in self.equipment.items():
+            print(f"  {slot.capitalize()}: {item.name if item else 'None'}")
+        if self.active_effects:
+            print("Active Effects:")
+            for effect in self.active_effects:
+                print(f"  {effect}")
+        else:
+            print("Active Effects: None")
+        print("--- End Stats ---")
+
+
+class Monster(Character):
+    """
+    Represents a monster in the game. Inherits from Character to reuse
+    attribute calculation logic but has its own HP scaling and initialization.
+    """
+    def __init__(self, name, level, archetype, char_class_name, primary_attributes_override, category="Common"):
+        # We are not calling super().__init__ because monster initialization is fundamentally different
+        # from a player character's. We will set the necessary attributes directly to avoid
+        # calling overridden methods from the superclass constructor before the subclass is fully initialized.
+        self.name = name
+        self.time_period = "Present" # Monsters don't have a time period in the same way
+        self.archetype = archetype
+        self.char_class_name = char_class_name
+
+        self.character_level = level
+        self.class_level = level
+        self.category = category
+
+        # Override the base attributes with the monster's specific stats.
+        self.primary_attributes = primary_attributes_override.copy()
+        self.equipment = { # Monsters don't use equipment in the same way
+            "weapon": None,
+            "armor_body": None,
+            "accessory1": None,
+            "accessory2": None
+        }
+        self.secondary_attributes = {}
+        self.tertiary_attributes = {}
+        self.active_effects = []
+        self.is_in_combat = False
+        self.combat_target = None
+
+        # Now that all attributes are set correctly, calculate stats.
+        self.recalculate_all_stats()
+
+    def recalculate_all_stats(self):
+        """
+        Recalculates all monster stats. Overrides Character method to ensure
+        the category HP modifier is applied correctly.
+        """
+        # First, run the standard calculations from the parent.
+        self._calculate_secondary_attributes()
+        self._calculate_tertiary_attributes()
+
+        # Now, apply the monster-specific HP modifier based on its category.
+        modifiers = {
+            "Common": 1.0, "Uncommon": 2.5, "Rare": 5.0,
+            "Elite": 10.0, "Legendary": 20.0
+        }
+        modifier = modifiers.get(self.category, 1.0)
+
+        # The base HP was just calculated by _calculate_tertiary_attributes.
+        # We apply the modifier to it.
+        if "HP" in self.tertiary_attributes:
+            self.tertiary_attributes["HP"] *= modifier
+
+        # Finally, set current HP/Mana to the new maximums.
+        self.current_hp = self.tertiary_attributes.get("HP", 0)
+        self.current_mana = self.tertiary_attributes.get("Mana", 0)
+
+    def display_stats(self, title="Monster Stats"):
+        """A simplified stat display for monsters."""
+        hp = self.tertiary_attributes.get('HP', 0)
+        print(f"\n--- {title}: {self.name} (Lvl {self.character_level} {self.category} {self.char_class_name}) ---")
+        print(f"  HP: {self.current_hp:.2f} / {hp:.2f}")
+        print(f"  AP: {self.tertiary_attributes.get('AP', 0):.2f}")
+        print(f"  Armor: {self.tertiary_attributes.get('Armor', 0):.2f}")
+        print("--- End Stats ---")

@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block title %}Create Character{% endblock %}
+
+{% block content %}
+    <h2>Create New Character</h2>
+    <form method="post">
+        <p>
+            <label for="char_name">Character Name:</label><br>
+            <input type="text" name="char_name" id="char_name" required>
+        </p>
+        <p>
+            <label for="char_class">Class:</label><br>
+            <select name="char_class" id="char_class" required>
+                <option value="" disabled selected>-- Select a Class --</option>
+                {% for class_name, details in classes.items() %}
+                    <option value="{{ class_name }}">{{ class_name }} ({{ details.time_period }}, {{ details.archetype }})</option>
+                {% endfor %}
+            </select>
+        </p>
+        <p>
+            <input type="submit" value="Create Character">
+            <a href="{{ url_for('dashboard') }}" style="margin-left: 1em;">Cancel</a>
+        </p>
+    </form>
+{% endblock %}

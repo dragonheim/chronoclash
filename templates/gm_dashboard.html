@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+
+{% block title %}GM Dashboard{% endblock %}
+
+{% block content %}
+    <h2>Game Master Dashboard</h2>
+    <p>Welcome, Game Master. Use these tools to monitor game activity.</p>
+    <a href="{{ url_for('online_players') }}">View Online Players</a>
+{% endblock %}

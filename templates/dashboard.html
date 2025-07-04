@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <h2>Character Dashboard</h2>
+    
+    <h3>Your Characters</h3>
+    {% if not characters %}
+        <p>You have no characters yet.</p>
+    {% else %}
+        <ul style="list-style-type: none; padding: 0;">
+        {% for char in characters %}
+            <li style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 3px; display: flex; justify-content: space-between; align-items: center;">
+                <span>
+                    <strong>{{ char.name }}</strong> - Level {{ char.level }} {{ char.time_period }} {{ char.char_class_name }}
+                </span>
+                <!-- Delete Character Form -->
+                <form method="post" action="{{ url_for('delete_character', char_id=char.id) }}" onsubmit="return confirm('Are you sure you want to permanently delete this character?');">
+                    <input type="submit" value="Delete" style="background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">
+                </form>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    <hr>
+    <a href="{{ url_for('create_character') }}">Create New Character</a><br><br>
+    <a href="{{ url_for('delete_account') }}" style="color: #a94442;">Delete Account</a>
+{% endblock %}
