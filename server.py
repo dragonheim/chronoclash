@@ -3,10 +3,13 @@ import logging
 import sys
 import io
 import sqlite3
+import random
+import math
 import json
 from contextlib import redirect_stdout
-from mechanics import Character, Monster
-
+from mechanics.entities import Character, Monster
+from mechanics.equipment import Equipment
+from game_data import XP_FOR_LEVEL, MONSTER_BASE_XP, SPELLS
 # --- Configuration ---
 HOST = '0.0.0.0' # Listen on all available network interfaces
 PORT = 8888
@@ -52,17 +55,35 @@ class GameServer:
         self.clients = {}
         self.shutdown_event = asyncio.Event()
         self.combat_loop_task = None
-        self.zones = {
-            "Seattle": {
-                "monsters": [],
-                "broadcast_queue": asyncio.Queue()
-            }
-            # Can add more zones here later
-        }
+        self.zones = {}
+        self._load_zones()
+        self._load_npcs()
         self._spawn_initial_monsters()
         # A mapping of command strings to their handler methods
         self.command_handlers = {}
         self._register_commands()
+
+    def _load_zones(self):
+        """Loads all zones from the database into the server's state."""
+        logging.info("Loading zones from database...")
+        conn = get_db_connection()
+        try:
+            zones_data = conn.execute("SELECT id, name, description, required_level FROM zones").fetchall()
+            for zone_row in zones_data:
+                zone_name = zone_row['name']
+                self.zones[zone_name] = {
+                    "id": zone_row['id'],
+                    "description": zone_row['description'],
+                    "required_level": zone_row['required_level'],
+                    "npcs": [],
+                    "monsters": [],
+                    "broadcast_queue": asyncio.Queue()
+                }
+            logging.info(f"Loaded {len(self.zones)} zones: {list(self.zones.keys())}")
+        except sqlite3.Error as e:
+            logging.error(f"Database error while loading zones: {e}", exc_info=True)
+        finally:
+            conn.close()
 
     def _spawn_initial_monsters(self):
         """Loads monster spawn data from the database and populates the world."""
@@ -75,9 +96,10 @@ class GameServer:
                     mt.name, mt.archetype, mt.char_class_name,
                     mt.agility, mt.constitution, mt.strength,
                     mt.intelligence, mt.spirit, mt.wisdom,
-                    ms.zone_name, ms.level, ms.category, ms.quantity
+                    z.name AS zone_name, ms.level, ms.category, ms.quantity
                 FROM monster_spawns ms
                 JOIN monster_templates mt ON ms.monster_template_id = mt.id
+                JOIN zones z ON ms.zone_id = z.id
             """
             spawns = conn.execute(query).fetchall()
 
@@ -110,6 +132,31 @@ class GameServer:
         finally:
             conn.close()
 
+    def _load_npcs(self):
+        """Loads NPC data from the database and places them in their zones."""
+        logging.info("Loading NPCs from database...")
+        conn = get_db_connection()
+        try:
+            query = """
+                SELECT n.id, n.name, z.name AS zone_name, n.role, n.dialogue
+                FROM npcs n
+                JOIN zones z ON n.zone_id = z.id
+            """
+            npcs = conn.execute(query).fetchall()
+            for npc_data in npcs:
+                zone_name = npc_data['zone_name']
+                if zone_name not in self.zones:
+                    # This case should ideally not happen with foreign key constraints
+                    logging.warning(f"NPC '{npc_data['name']}' references zone '{zone_name}' which was not loaded. Skipping.")
+                    continue
+                self.zones[zone_name]["npcs"].append(dict(npc_data))
+                logging.info(f"Loaded NPC '{npc_data['name']}' into {zone_name}.")
+
+        except sqlite3.Error as e:
+            logging.error(f"Database error while loading NPCs: {e}", exc_info=True)
+        finally:
+            conn.close()
+
     def _register_commands(self):
         """Registers all available server commands."""
         self.command_handlers = {
@@ -120,6 +167,11 @@ class GameServer:
             "/users": self.handle_who, # Alias for /who
             "/look": self.handle_look,
             "/attack": self.handle_attack,
+            "/talk": self.handle_talk,
+            "/zone": self.handle_zone,
+            "/spend": self.handle_spend,
+            "/cast": self.handle_cast,
+            "/move": self.handle_zone, # Alias
         }
         logging.info(f"Registered commands: {list(self.command_handlers.keys())}")
 
@@ -160,6 +212,15 @@ class GameServer:
                 response_lines.append(f"  [Lvl {char.character_level}] {char.name}")
         else:
             response_lines.append("  You are alone.")
+
+        response_lines.append("") # Add a blank line for spacing
+
+        # List NPCs
+        response_lines.append("People here:")
+        npcs_in_zone = zone_data.get("npcs", [])
+        if npcs_in_zone:
+            for npc in npcs_in_zone:
+                response_lines.append(f"  {npc['name']} <{npc['role']}>")
 
         response_lines.append("") # Add a blank line for spacing
 
@@ -224,6 +285,216 @@ class GameServer:
         response = f"You attack the {target_monster.name}!\n"
         writer.write(response.encode())
         await writer.drain()
+
+    async def handle_talk(self, session, args):
+        """Handles talking to an NPC."""
+        writer = session['writer']
+        current_zone_name = session.get('zone', 'Unknown')
+
+        if not args:
+            writer.write(b"Usage: /talk <npc name>\n")
+            await writer.drain()
+            return
+
+        target_name = " ".join(args)
+        zone_data = self.zones.get(current_zone_name)
+
+        if not zone_data:
+            writer.write(b"You are in an unknown void and cannot talk to anyone.\n")
+            await writer.drain()
+            return
+
+        target_npc = None
+        for npc in zone_data.get('npcs', []):
+            if npc['name'].lower() == target_name.lower():
+                target_npc = npc
+                break
+
+        if not target_npc:
+            writer.write(f"You don't see anyone named '{target_name}' here.\n".encode())
+            await writer.drain()
+            return
+
+        dialogue = target_npc.get('dialogue', "...")
+        response = f"[{target_npc['name']}]: {dialogue}\n"
+        writer.write(response.encode())
+        await writer.drain()
+
+    async def handle_zone(self, session, args):
+        """Handles moving a character to a different zone."""
+        writer = session['writer']
+        player_character = session['character']
+        current_zone_name = session.get('zone')
+
+        if player_character.has_flag("Rooted"):
+            writer.write(b"You are Rooted and cannot move!\n")
+            await writer.drain()
+            return
+
+        if not args:
+            available_zones = [
+                name for name, data in self.zones.items()
+                if player_character.character_level >= data['required_level'] and name != current_zone_name
+            ]
+            response = "Usage: /zone <destination>\n"
+            if available_zones:
+                response += f"Available zones for you: {', '.join(available_zones)}\n"
+            else:
+                response += "There are no other zones available to you at this time.\n"
+            writer.write(response.encode())
+            await writer.drain()
+            return
+
+        target_zone_input = " ".join(args)
+
+        # Find the actual zone name (case-insensitive)
+        actual_zone_name = None
+        for z_name in self.zones.keys():
+            if z_name.lower() == target_zone_input.lower():
+                actual_zone_name = z_name
+                break
+
+        if not actual_zone_name:
+            writer.write(f"Zone '{target_zone_input}' does not exist.\n".encode())
+            await writer.drain()
+            return
+
+        if actual_zone_name == current_zone_name:
+            writer.write(f"You are already in {current_zone_name}.\n".encode())
+            await writer.drain()
+            return
+
+        if player_character.is_in_combat:
+            writer.write(b"You cannot change zones while in combat!\n")
+            await writer.drain()
+            return
+
+        zone_data = self.zones[actual_zone_name]
+        if player_character.character_level < zone_data['required_level']:
+            writer.write(f"You must be level {zone_data['required_level']} to enter {actual_zone_name}.\n".encode())
+            await writer.drain()
+            return
+
+        logging.info(f"Player {player_character.name} is moving from {current_zone_name} to {actual_zone_name}.")
+        await self.broadcast_to_zone(current_zone_name, f"INFO: {player_character.name} has left the area.", exclude_session=session)
+        session['zone'] = actual_zone_name
+        await self.broadcast_to_zone(actual_zone_name, f"INFO: {player_character.name} has arrived.", exclude_session=session)
+        writer.write(f"You travel to {actual_zone_name}.\n".encode())
+        await writer.drain()
+        await self.handle_look(session, []) # Automatically look around the new zone
+
+    async def handle_spend(self, session, args):
+        """Handles spending attribute points. Usage: /spend <attr> <points> ..."""
+        writer = session['writer']
+        player_character = session['character']
+
+        if not args or len(args) % 2 != 0:
+            response = "Usage: /spend <attribute> <points> [attribute2] [points2] ...\n"
+            response += "Example: /spend Strength 2 Agility 1\n"
+            response += f"You have {player_character.attribute_points} points available to spend.\n"
+            writer.write(response.encode())
+            await writer.drain()
+            return
+
+        allocations = {}
+        try:
+            for i in range(0, len(args), 2):
+                # Capitalize to match the expected format in mechanics
+                attr_name = args[i].capitalize()
+                points = int(args[i+1])
+                allocations[attr_name] = allocations.get(attr_name, 0) + points
+        except (ValueError, IndexError):
+            writer.write(b"Invalid format. Please provide attribute names and integer point values.\n")
+            await writer.drain()
+            return
+
+        success, message = player_character.spend_attribute_points(allocations)
+
+        writer.write(f"{message}\n".encode())
+        await writer.drain()
+
+        if success:
+            await self.update_character_progress(player_character)
+            await self.handle_stats(session, []) # Show updated stats
+
+    async def handle_cast(self, session, args):
+        """Handles casting a spell. Usage: /cast <spell name>"""
+        writer = session['writer']
+        player_character = session['character']
+
+        if not args:
+            writer.write(b"Usage: /cast <spell name>\n")
+            await writer.drain()
+            return
+
+        spell_name = " ".join(args).lower()
+        spell_data = SPELLS.get(spell_name)
+
+        if not spell_data:
+            writer.write(f"You don't know a spell named '{' '.join(args)}'.\n".encode())
+            await writer.drain()
+            return
+
+        # --- Pre-cast checks ---
+        if spell_data.get("requires_combat", False) and (not player_character.is_in_combat or not player_character.combat_target):
+            writer.write(b"You must be in combat to cast that spell.\n")
+            await writer.drain()
+            return
+
+        can_cast, reason = player_character.can_cast(spell_name, spell_data)
+        if not can_cast:
+            writer.write(f"{reason}\n".encode())
+            await writer.drain()
+            return
+
+        # --- Deduct cost and put on cooldown ---
+        player_character.current_mana -= spell_data.get("mana_cost", 0)
+        player_character.put_on_cooldown(spell_name, spell_data)
+
+        # --- Execute Spell Effect ---
+        spell_type = spell_data.get("type")
+        archetype = player_character.archetype
+        max_hp = player_character.tertiary_attributes.get("HP", 0)
+
+        if spell_type == "heal":
+            heal_modifier = spell_data["archetype_mods"].get(archetype, 0.0)
+            heal_amount = max_hp * heal_modifier
+            amount_healed = player_character.heal(heal_amount)
+
+            if amount_healed > 0:
+                response = f"You cast {spell_name.title()}, healing yourself for {amount_healed:.0f} HP.\n"
+                response += f"You are now at {player_character.current_hp:.0f}/{max_hp:.0f} HP.\n"
+            else:
+                response = "You are already at full health.\n"
+            writer.write(response.encode())
+            await writer.drain()
+
+        elif spell_type == "damage":
+            target = player_character.combat_target
+            # This check is slightly redundant due to the pre-cast check, but it's safe.
+            if not target:
+                writer.write(b"You don't have a target.\n")
+                await writer.drain()
+                return
+
+            damage_modifier = spell_data["archetype_mods"].get(archetype, 0.0)
+            damage = round(max_hp * damage_modifier)
+            target.current_hp -= damage
+
+            response = f"You unleash a {spell_name.title()} at {target.name}, dealing {damage} damage!\n"
+            writer.write(response.encode())
+            await writer.drain()
+
+            if target.current_hp <= 0:
+                await self.handle_defeat(player_character, target)
+            else:
+                target_max_hp = target.tertiary_attributes.get('HP', 0)
+                response = f"The {target.name} has {target.current_hp:.0f}/{target_max_hp:.0f} HP remaining.\n"
+                writer.write(response.encode())
+                await writer.drain()
+        else:
+            writer.write(f"Spell '{spell_name}' has an unknown effect type.\n".encode())
+            await writer.drain()
 
     async def handle_quit(self, session, args):
         """Handles the /quit command. Signals for a clean disconnect."""
@@ -401,7 +672,22 @@ class GameServer:
             # Manually set the level from DB and recalculate stats
             player_character.character_level = char_data['level']
             player_character.class_level = char_data['level']
+            player_character.experience = char_data['experience']
+            player_character.attribute_points = char_data['attribute_points']
+            # Set the XP needed for the next level based on the loaded level
+            player_character.experience_to_next_level = XP_FOR_LEVEL.get(player_character.character_level, 999999)
             player_character.recalculate_all_stats()
+
+            # --- Load saved HP/Mana ---
+            # If current_hp is -1 (default), it's a new character, so they start at full health (which recalculate_all_stats already did).
+            # Otherwise, load the saved values, ensuring they don't exceed the max.
+            if char_data['current_hp'] != -1:
+                player_character.current_hp = min(char_data['current_hp'], player_character.tertiary_attributes.get('HP', 0))
+            if char_data['current_mana'] != -1:
+                player_character.current_mana = min(char_data['current_mana'], player_character.tertiary_attributes.get('Mana', 0))
+
+            # Load and equip items
+            await self._load_character_equipment(player_character)
 
             # Create and store the client's session
             session = {
@@ -476,6 +762,15 @@ class GameServer:
                 del self.clients[addr]
 
             logging.info(f"Closing connection for {addr} ({char_name})")
+
+            # --- Save character progress on disconnect ---
+            if player_character:
+                try:
+                    await self.update_character_progress(player_character)
+                    logging.info(f"Saved progress for {player_character.name} on disconnect.")
+                except Exception as e:
+                    logging.error(f"Failed to save progress for {player_character.name} on disconnect: {e}")
+
             writer.close()
             await writer.wait_closed()
 
@@ -545,6 +840,21 @@ class GameServer:
                 # This client disconnected during the broadcast, which is fine.
                 pass
 
+    async def broadcast_to_zone(self, zone_name, message, exclude_session=None):
+        """Sends a message to all clients in a specific zone."""
+        logging.info(f"Broadcasting to zone '{zone_name}': {message}")
+        full_message = f"{message}\n"
+        for session in self.clients.values():
+            if session.get('zone') == zone_name:
+                # Don't send the message to the excluded session (e.g., the player who triggered it)
+                if exclude_session and session is exclude_session:
+                    continue
+                try:
+                    session['writer'].write(full_message.encode())
+                    await session['writer'].drain()
+                except ConnectionError:
+                    pass
+
     def get_session_by_character(self, character):
         """Finds a client session associated with a given character object."""
         for session in self.clients.values():
@@ -568,6 +878,21 @@ class GameServer:
             msg = f"You have defeated the {defeated.name}!\n"
             victor_session['writer'].write(msg.encode())
             await victor_session['writer'].drain()
+
+            # If a player defeated a monster, award experience
+            if isinstance(victor, Character) and isinstance(defeated, Monster):
+                # Use the formula from game_data.py
+                xp_reward = math.ceil(MONSTER_BASE_XP * defeated.character_level)
+                
+                victor_session['writer'].write(f"You gain {xp_reward} experience.\n".encode())
+                await victor_session['writer'].drain()
+
+                level_up_messages = victor.gain_experience(xp_reward)
+                for message in level_up_messages:
+                    victor_session['writer'].write(f"\n{message}\n".encode())
+                    await victor_session['writer'].drain()
+                
+                await self.update_character_progress(victor)
 
         # Handle player defeat
         defeated_session = self.get_session_by_character(defeated)
@@ -604,9 +929,29 @@ class GameServer:
 
                 # Process combat for each combatant
                 for attacker in all_combatants:
+                    # --- Tick down effects and statuses at the start of the turn ---
+                    # This happens for everyone in combat, even if they are stunned.
+                    expiration_messages = attacker.tick_down_effects()
+                    if expiration_messages:
+                        attacker_session = self.get_session_by_character(attacker)
+                        if attacker_session:
+                            for msg in expiration_messages:
+                                attacker_session['writer'].write(f"INFO: {msg}\n".encode())
+                            await attacker_session['writer'].drain()
+
                     # Ensure the attacker is still in combat and has a valid target
                     if not attacker.is_in_combat or not attacker.combat_target:
                         continue
+
+                    # --- Check for action-preventing statuses ---
+                    if attacker.has_flag("Stunned"):
+                        attacker_session = self.get_session_by_character(attacker)
+                        if attacker_session:
+                            msg = "You are Stunned and cannot act!\n"
+                            attacker_session['writer'].write(msg.encode())
+                            await attacker_session['writer'].drain()
+                        # The lack of an attack message is enough to inform the target.
+                        continue # Skip the rest of the turn
 
                     defender = attacker.combat_target
                     
@@ -618,10 +963,25 @@ class GameServer:
                         continue
 
                     # --- Damage Calculation ---
-                    attack_power = attacker.tertiary_attributes.get('AP', 5)
-                    armor = defender.tertiary_attributes.get('Armor', 0)
-                    damage = max(1, round(attack_power - armor)) # At least 1 damage
+                    # Start with a base unarmed damage range
+                    base_damage = random.randint(1, 3)
                     
+                    # If the attacker has a weapon, use its damage range instead
+                    weapon = attacker.equipment.get('weapon')
+                    if weapon and weapon.damage:
+                        min_dmg = weapon.damage.get('min', 1)
+                        max_dmg = weapon.damage.get('max', 2)
+                        base_damage = random.randint(min_dmg, max_dmg)
+
+                    # Add bonus damage from Attack Power (AP)
+                    # Using a conversion factor of 0.25 (4 AP = +1 damage)
+                    ap_bonus_damage = attacker.tertiary_attributes.get('AP', 0) * 0.25
+
+                    pre_mitigation_damage = base_damage + ap_bonus_damage
+
+                    armor = defender.tertiary_attributes.get('Armor', 0)
+                    damage = max(1, round(pre_mitigation_damage - armor)) # Always do at least 1 damage
+
                     defender.current_hp -= damage
 
                     # --- Send messages ---
@@ -646,6 +1006,53 @@ class GameServer:
                 break
             except Exception as e:
                 logging.error(f"Error in combat loop: {e}", exc_info=True)
+
+    async def _load_character_equipment(self, character: Character):
+        """Queries the DB for a character's equipped items and applies them."""
+        logging.info(f"Loading equipment for {character.name}...")
+        conn = None
+        try:
+            conn = get_db_connection()
+            query = """
+                SELECT i.id, i.name, i.item_type, i.slot, i.rarity, i.level_req, i.bonuses, i.damage, i.description
+                FROM character_inventory ci
+                JOIN items i ON ci.item_id = i.id
+                WHERE ci.character_id = (SELECT id FROM characters WHERE name = ?) AND ci.is_equipped = 1
+            """
+            equipped_items_data = conn.execute(query, (character.name,)).fetchall()
+
+            for item_data in equipped_items_data:
+                equipment_piece = Equipment(
+                    item_data['id'],
+                    name=item_data['name'],
+                    item_type=item_data['item_type'],
+                    slot=item_data['slot'],
+                    rarity=item_data['rarity'],
+                    level_req=item_data['level_req'],
+                    bonuses_json=item_data['bonuses'],
+                    damage_json=item_data['damage'],
+                    description=item_data['description']
+                )
+                character.equip_item(equipment_piece)
+        finally:
+            if conn:
+                conn.close()
+
+    async def update_character_progress(self, character):
+        """Saves a character's current level and experience to the database."""
+        conn = None
+        try:
+            conn = get_db_connection()
+            conn.execute(
+                "UPDATE characters SET level = ?, experience = ?, attribute_points = ?, current_hp = ?, current_mana = ? WHERE name = ?",
+                (character.character_level, character.experience, character.attribute_points, character.current_hp, character.current_mana, character.name)
+            )
+            conn.commit()
+            logging.info(f"Updated progress for {character.name} in DB: Level {character.character_level}, XP {character.experience}, "
+                         f"Points {character.attribute_points}, HP {character.current_hp:.0f}, Mana {character.current_mana:.0f}")
+        finally:
+            if conn:
+                conn.close()
 
     async def start(self):
         """Starts the game server and the status server, and waits for shutdown."""

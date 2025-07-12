@@ -11,9 +11,10 @@ try:
     with open('config.json', 'r') as f:
         config = json.load(f)
         DB_NAME = config['DB_NAME']
+        STATUS_SERVER_URL = config['STATUS_SERVER_URL']
 except (FileNotFoundError, KeyError, json.JSONDecodeError) as e:
     # Use print for Flask's startup sequence before logging might be configured
-    print(f"FATAL: Could not load DB_NAME from config.json: {e}. Exiting.")
+    print(f"FATAL: Could not load configuration from config.json: {e}. Exiting.")
     exit(1)
 
 # --- Flask App Initialization ---
@@ -21,11 +22,6 @@ app = Flask(__name__)
 # This secret key is essential for session management.
 # In a production environment, this should be a long, random, and secret string.
 app.secret_key = 'dev-secret-key'
-
-# URL for the game server's status endpoint.
-# Note: If running this web app in Docker and the game server on the host, use 'http://host.docker.internal:8889'
-# STATUS_SERVER_URL = "http://host.docker.internal:8889"
-STATUS_SERVER_URL = "http://192.168.86.52:8889"
 
 # --- Game Data ---
 # This data, derived from the GDD, helps the web app understand class options.
@@ -277,15 +273,31 @@ def create_character():
         archetype = class_info['archetype']
 
         conn = get_db_connection()
+        cursor = conn.cursor()
         try:
-            conn.execute(
+            cursor.execute(
                 'INSERT INTO characters (user_id, name, time_period, archetype, char_class_name) VALUES (?, ?, ?, ?, ?)',
                 (session['user_id'], char_name, time_period, archetype, char_class)
             )
+            
+            # Get the ID of the character we just created
+            character_id = cursor.lastrowid
+
+            # As per weapons.md, every character starts with a Rusted Pipe Wrench.
+            # We assume its ID is 1 from database_setup.py.
+            starting_weapon_id = 1
+
+            # Add the starting weapon to the character's inventory and equip it
+            cursor.execute(
+                'INSERT INTO character_inventory (character_id, item_id, is_equipped) VALUES (?, ?, ?)',
+                (character_id, starting_weapon_id, 1) # 1 for True (equipped)
+            )
+
             conn.commit()
             flash(f'Character "{char_name}" created successfully!', 'success')
             return redirect(url_for('dashboard'))
         except sqlite3.IntegrityError:
+            conn.rollback()
             flash(f'A character with the name "{char_name}" already exists.', 'error')
         finally:
             conn.close()

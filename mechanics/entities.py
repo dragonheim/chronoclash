@@ -1,7 +1,10 @@
 import math
+from typing import Dict, List
+import asyncio
 from .constants import *
 from .effects import Effect
 from .equipment import Equipment
+from game_data import XP_FOR_LEVEL, MAX_LEVEL
 
 
 class Character:
@@ -26,9 +29,14 @@ class Character:
 
         self.secondary_attributes = {}
         self.tertiary_attributes = {}
+        self.status_flags: Dict[str, int] = {} # e.g., {"Stunned": 3}
+        self.spell_cooldowns: Dict[str, float] = {} # e.g., {"chrono-blast": 1678886400.123}
         self.active_effects = []
         self.is_in_combat = False
         self.combat_target = None
+        self.experience = 0
+        self.attribute_points = 0 # Points to spend on leveling up
+        self.experience_to_next_level = XP_FOR_LEVEL.get(self.character_level, 999999)
 
         # Set current resource pools
         self.recalculate_all_stats()
@@ -100,64 +108,100 @@ class Character:
 
 
     def recalculate_all_stats(self):
-        """Recalculates all secondary and tertiary stats."""
+        """
+        Recalculates all secondary and tertiary stats.
+        This method preserves current HP/Mana, adjusting them relative to
+        changes in max HP/Mana (e.g., from leveling up or equipment).
+        """
+        # Store old max values to see if they changed
+        old_max_hp = self.tertiary_attributes.get("HP", 0)
+        old_max_mana = self.tertiary_attributes.get("Mana", 0)
+
         self._calculate_secondary_attributes()  # Effects are applied inside here
         self._calculate_tertiary_attributes()
-        # On stat change, reset current HP/Mana to new max for simplicity.
-        self.current_hp = self.tertiary_attributes.get("HP", 0)
-        self.current_mana = self.tertiary_attributes.get("Mana", 0)
 
-    def allocate_primary_points(self, points_to_allocate, max_per_attr, allocations):
-        """Allocations is a dict like {'Strength': 2, 'Agility': 1}"""
+        new_max_hp = self.tertiary_attributes.get("HP", 0)
+        new_max_mana = self.tertiary_attributes.get("Mana", 0)
+
+        # --- Adjust Current HP ---
+        # If current_hp doesn't exist yet (on first run), initialize it to max.
+        if not hasattr(self, 'current_hp'):
+             self.current_hp = new_max_hp
+        # If max HP increased (e.g. level up, new gear), add the difference to current HP.
+        elif new_max_hp > old_max_hp:
+            self.current_hp += (new_max_hp - old_max_hp)
+        # Ensure current HP doesn't exceed the new max (e.g. if an item was unequipped).
+        self.current_hp = min(self.current_hp, new_max_hp)
+
+        # --- Adjust Current Mana (similar logic) ---
+        if not hasattr(self, 'current_mana'):
+            self.current_mana = new_max_mana
+        elif new_max_mana > old_max_mana:
+            self.current_mana += (new_max_mana - old_max_mana)
+        self.current_mana = min(self.current_mana, new_max_mana)
+
+    def spend_attribute_points(self, allocations: Dict[str, int]):
+        """
+        Spends available attribute points based on a dictionary of allocations.
+        Returns a tuple of (success: bool, message: str).
+        """
         if not allocations:
-            print("No allocations provided.")
-            return True # Technically not an error if 0 points to allocate and 0 allocated
+            return False, "No allocations provided."
 
-        allocated_total = sum(allocations.values())
-        if allocated_total > points_to_allocate:
-            print(f"Error: Tried to allocate {allocated_total} points, but only {points_to_allocate} are available.")
-            return False
-            
-        temp_primary_attributes = self.primary_attributes.copy()
-        for attr, val in allocations.items():
-            if val < 0:
-                print(f"Error: Cannot allocate negative points to {attr}.")
-                return False
-            if val > max_per_attr:
-                print(f"Error: Cannot allocate more than {max_per_attr} points to {attr} in this allocation.")
-                return False
-            if attr not in temp_primary_attributes:
-                print(f"Error: Invalid attribute {attr}.")
-                return False
-            temp_primary_attributes[attr] += val
+        total_to_spend = 0
+        for attr, value in allocations.items():
+            if attr not in self.primary_attributes:
+                return False, f"Invalid attribute '{attr}'."
+            if not isinstance(value, int) or value < 0:
+                return False, f"Allocation for '{attr}' must be a non-negative integer."
+            total_to_spend += value
+
+        if total_to_spend <= 0:
+            return False, "You must allocate at least one point."
+
+        if total_to_spend > self.attribute_points:
+            return False, f"You tried to spend {total_to_spend} points, but only have {self.attribute_points} available."
+
+        # All checks passed, apply the points
+        for attr, value in allocations.items():
+            self.primary_attributes[attr] += value
         
-        self.primary_attributes = temp_primary_attributes
-        # print(f"Allocated {allocations}. New Primary Attributes: {self.primary_attributes}")
+        self.attribute_points -= total_to_spend
         self.recalculate_all_stats()
-        return True
+        return True, f"Successfully spent {total_to_spend} points. You have {self.attribute_points} remaining."
 
-    def level_up(self, primary_allocations=None):
+    def gain_experience(self, amount):
+        """
+        Adds experience to the character and checks for level-ups.
+        Returns a list of messages generated during the process (e.g., level up notifications).
+        """
         if self.character_level >= MAX_LEVEL:
-            print(f"{self.name} is already at max level ({MAX_LEVEL}).")
-            return False
+            return [] # At max level, no more XP gain
 
-        self.character_level += 1
-        self.class_level += 1 # Assuming single class for now
-        print(f"\n>>> {self.name} leveled up to Level {self.character_level}! <<<")
+        self.experience += amount
+        leveled_up = False
+        messages = []
 
-        if primary_allocations:
-            if not self.allocate_primary_points(LEVEL_UP_ATTRIBUTE_POINTS, MAX_LEVEL_UP_ALLOCATION_PER_ATTRIBUTE, primary_allocations):
-                # Revert level up if allocation fails
-                self.character_level -=1
-                self.class_level -=1
-                print(f"Level up to {self.character_level+1} failed due to invalid point allocation. Reverting.")
-                self.recalculate_all_stats() # Recalculate with old level stats
-                return False
-        else:
-            print(f"Gained {LEVEL_UP_ATTRIBUTE_POINTS} attribute points to distribute (no auto-allocation).")
+        # Use a while loop in case of multiple level-ups from one XP gain
+        while self.experience >= self.experience_to_next_level and self.character_level < MAX_LEVEL:
+            leveled_up = True
+            messages.append(self._level_up())
+
+        if leveled_up:
+            # The final message includes the current XP status
+            messages.append(f"You are now Level {self.character_level}. (XP: {self.experience}/{self.experience_to_next_level})")
         
-        self.recalculate_all_stats() # Recalculate after successful level up and point allocation
-        return True
+        return messages
+
+    def _level_up(self):
+        """Internal method to handle the logic for a character leveling up."""
+        self.experience -= self.experience_to_next_level
+        self.character_level += 1
+        self.class_level += 1 # For now, class level is tied to character level
+        self.attribute_points += LEVEL_UP_ATTRIBUTE_POINTS
+        self.experience_to_next_level = XP_FOR_LEVEL.get(self.character_level, 999999)
+        self.recalculate_all_stats()
+        return f"** DING! You have reached Level {self.character_level}! You gain {LEVEL_UP_ATTRIBUTE_POINTS} attribute points! **"
 
     def equip_item(self, item: Equipment):
         """Equips an item to the appropriate slot and recalculates stats."""
@@ -188,37 +232,111 @@ class Character:
         # Remove existing effects with the same name to prevent simple stacking (implement stacking rules if needed)
         self.active_effects = [e for e in self.active_effects if e.name != effect.name]
         # Add a new instance of the effect to ensure its duration is reset
-        new_effect_instance = Effect(effect.name, effect.target_attribute, effect.modifier_type, effect.value, effect.duration_ticks)
+        new_effect_instance = Effect(
+            effect.name, effect.target_attribute, effect.modifier_type, effect.value, effect.duration_ticks,
+            dot_damage=effect.dot_damage, dot_type=effect.dot_type
+        )
         self.active_effects.append(new_effect_instance)
-        print(f"Applied {new_effect_instance}")
+        # This print is for server-side logging/debugging
+        print(f"Applied effect '{effect.name}' to {self.name} for {effect.duration_ticks} ticks.")
         self.recalculate_all_stats()
 
-    def tick_effects(self):
-        print("\n--- Ticking effects ---")
-        effects_expired_this_tick = False
-        new_active_effects_list = []
+    def apply_status_flag(self, flag_name: str, duration_ticks: int):
+        """Applies a status flag for a certain duration."""
+        self.status_flags[flag_name] = duration_ticks
+        # This print is for server-side logging/debugging
+        print(f"Applied status '{flag_name}' to {self.name} for {duration_ticks} ticks.")
+
+    def has_flag(self, flag_name: str) -> bool:
+        """Checks if a character currently has a given status flag."""
+        return self.status_flags.get(flag_name, 0) > 0
+
+    def tick_down_effects(self) -> List[str]:
+        """
+        Ticks down all timed effects and status flags.
+        Returns a list of messages for effects that have expired or ticked.
+        """
+        messages = []
+        recalc_needed = False
+
+        # Tick down stat-modifying effects
+        new_active_effects = []
         for effect in self.active_effects:
+            # --- Process DoT damage for this tick ---
+            if effect.dot_damage > 0:
+                damage = effect.dot_damage
+                self.current_hp -= damage
+                dot_message = f"You take {damage} {effect.dot_type or 'damage'} damage from '{effect.name}'."
+                messages.append(dot_message)
+
             effect.remaining_ticks -= 1
             if effect.remaining_ticks > 0:
-                new_active_effects_list.append(effect)
-                # print(f"  {effect.name} has {effect.remaining_ticks} ticks left.")
+                new_active_effects.append(effect)
             else:
-                print(f"  Effect {effect.name} has EXPIRED.")
-                effects_expired_this_tick = True
-        
-        self.active_effects = new_active_effects_list
-        if effects_expired_this_tick:
-            print("  Recalculating stats due to effect expiration.")
+                messages.append(f"The effect '{effect.name}' has worn off.")
+                recalc_needed = True
+        self.active_effects = new_active_effects
+
+        # Tick down status flags
+        new_status_flags = {}
+        for flag, duration in self.status_flags.items():
+            duration -= 1
+            if duration > 0:
+                new_status_flags[flag] = duration
+            else:
+                # A more generic message for flags wearing off
+                messages.append(f"You are no longer {flag}.")
+        self.status_flags = new_status_flags
+
+        # If any stat-modifying effect expired, we need to recalculate stats.
+        if recalc_needed:
             self.recalculate_all_stats()
-        elif not self.active_effects:
-            print("  No active effects remaining.")
-        else:
-            print("  Remaining active effects:")
-            for eff in self.active_effects: print(f"    {eff}")
-        print("--- End Ticking effects ---")
+
+        return messages
+
+    def can_cast(self, spell_name: str, spell_data: Dict) -> (bool, str):
+        """
+        Checks if the character can cast a given spell based on mana and cooldown.
+        Returns a tuple of (can_cast: bool, reason: str).
+        """
+        # Check mana
+        mana_cost = spell_data.get("mana_cost", 0)
+        if self.current_mana < mana_cost:
+            return False, f"Not enough mana. Requires {mana_cost}, you have {self.current_mana:.0f}."
+
+        # Check cooldown
+        cooldown_end_time = self.spell_cooldowns.get(spell_name)
+        if cooldown_end_time and asyncio.get_event_loop().time() < cooldown_end_time:
+            remaining = cooldown_end_time - asyncio.get_event_loop().time()
+            return False, f"Spell '{spell_name}' is on cooldown for {remaining:.1f} more seconds."
+
+        return True, ""
+
+    def put_on_cooldown(self, spell_name: str, spell_data: Dict):
+        """Puts a spell on cooldown by recording its end time."""
+        cooldown_duration = spell_data.get("cooldown", 0)
+        if cooldown_duration > 0:
+            self.spell_cooldowns[spell_name] = asyncio.get_event_loop().time() + cooldown_duration
+
+    def heal(self, amount: float) -> float:
+        """
+        Heals the character for a given amount, capped at max HP.
+        Returns the actual amount healed.
+        """
+        max_hp = self.tertiary_attributes.get("HP", 0)
+        if self.current_hp >= max_hp:
+            return 0.0
+
+        missing_hp = max_hp - self.current_hp
+        amount_to_heal = min(amount, missing_hp)
+        self.current_hp += amount_to_heal
+        return amount_to_heal
 
     def display_stats(self, title="Character Stats"):
         print(f"\n--- {title}: {self.name} (Lvl {self.character_level} {self.time_period} {self.archetype} {self.char_class_name}) ---")
+        print(f"  HP: {self.current_hp:.0f} / {self.tertiary_attributes.get('HP', 0):.0f} | Mana: {self.current_mana:.0f} / {self.tertiary_attributes.get('Mana', 0):.0f}")
+        print(f"  XP: {self.experience} / {self.experience_to_next_level} | Points to Spend: {self.attribute_points}")
+        print("-" * 60)
         print("Primary Attributes:")
         for attr, val in self.primary_attributes.items():
             print(f"  {attr:<15}: {val}")
@@ -237,7 +355,6 @@ class Character:
                 print(f"  {effect}")
         else:
             print("Active Effects: None")
-        print("--- End Stats ---")
 
 
 class Monster(Character):
@@ -246,33 +363,28 @@ class Monster(Character):
     attribute calculation logic but has its own HP scaling and initialization.
     """
     def __init__(self, name, level, archetype, char_class_name, primary_attributes_override, category="Common"):
-        # We are not calling super().__init__ because monster initialization is fundamentally different
-        # from a player character's. We will set the necessary attributes directly to avoid
-        # calling overridden methods from the superclass constructor before the subclass is fully initialized.
-        self.name = name
-        self.time_period = "Present" # Monsters don't have a time period in the same way
-        self.archetype = archetype
-        self.char_class_name = char_class_name
+        # Set category before calling super, as the parent's __init__ will trigger
+        # the overridden recalculate_all_stats, which depends on the category.
+        self.category = category
+        # Call the parent constructor. We use "Present" as the time period
+        # because it has no inherent modifiers, making it a neutral base for monsters.
+        super().__init__(name=name, time_period="Present", archetype=archetype, char_class_name=char_class_name)
 
+        # --- Override Player-Specific Defaults ---
         self.character_level = level
         self.class_level = level
-        self.category = category
-
-        # Override the base attributes with the monster's specific stats.
         self.primary_attributes = primary_attributes_override.copy()
-        self.equipment = { # Monsters don't use equipment in the same way
-            "weapon": None,
-            "armor_body": None,
-            "accessory1": None,
-            "accessory2": None
-        }
-        self.secondary_attributes = {}
-        self.tertiary_attributes = {}
-        self.active_effects = []
-        self.is_in_combat = False
-        self.combat_target = None
 
-        # Now that all attributes are set correctly, calculate stats.
+        # Monsters do not have player-specific progression attributes.
+        # It's good practice to remove them from the instance.
+        if hasattr(self, 'experience'):
+            del self.experience
+        if hasattr(self, 'attribute_points'):
+            del self.attribute_points
+        if hasattr(self, 'experience_to_next_level'):
+            del self.experience_to_next_level
+
+        # Recalculate stats with the correct monster level and attributes.
         self.recalculate_all_stats()
 
     def recalculate_all_stats(self):

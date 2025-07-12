@@ -1,3 +1,4 @@
 {
-    "DB_NAME": "chronoclash.db"
+    "DB_NAME": "chronoclash.db",
+    "STATUS_SERVER_URL": "http://127.0.0.1:8889"
 }
