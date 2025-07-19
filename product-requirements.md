@@ -7,13 +7,13 @@
 ## 1. Introduction
 
 ### 1.1. Overview
-Chrono Clash is a foundational MMORPG project where three distinct time periods—a magical Past, a technological Present, and a cybernetic Future—have catastrophically collided. Players assume the role of "Chrono-Walkers," rare individuals capable of perceiving and navigating the fractured timelines. The project serves as both a playable game prototype and a learning resource for MMORPG development, demonstrating core concepts like networking, character progression, and combat on a large world grid.
+Chrono Clash is a foundational, cooperative PVE (Player vs. Environment) MMORPG project where three distinct time periods—a magical Past, a technological Present, and a cybernetic Future—have catastrophically collided. Players assume the role of "Chrono-Walkers," rare individuals capable of perceiving and navigating the fractured timelines. The project serves as both a playable game prototype and a learning resource for MMORPG development, demonstrating core concepts like networking, character progression, and combat on a large world grid.
 
 ### 1.2. Purpose
 This document outlines the product requirements for the initial release (Minimum Viable Product) of the Chrono Clash server and client. It defines the scope, features, and functionality required to deliver a core gameplay experience.
 
 ### 1.3. Target Audience
-*   **Players:** Fans of MMORPGs who enjoy theory-crafting character builds, exploring unique worlds, and engaging in PVE combat and crafting.
+*   **Players:** Fans of MMORPGs who enjoy theory-crafting character builds, exploring unique worlds, and engaging in cooperative PVE combat and crafting.
 *   **Developers:** Individuals and teams interested in learning about or contributing to open-source MMO game development.
 
 ## 2. Project Goals & Objectives
