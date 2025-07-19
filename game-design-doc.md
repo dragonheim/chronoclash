@@ -3,6 +3,8 @@
 ## Game Overview
 The basic lore is that three different time periods have collided in the present day. 5000 years in the past includes swords and sorcery, present day includes tech and guns, while 5000 years in the future includes cyborgs and lasers. The players create and play individuals called **Chrono-Walkers**, humans with the rare ability of perceiving and navigating the fractured timelines. Whether through mutation, ancient bloodline, or experimental augmentation, they are uniquely perceptive to the flows of time in this collision. Their mission? Survive. Discover. Choose.
 
+Chrono Clash is a real-time, action-oriented MMORPG that combines elements of traditional RPGs with modern mechanics in a cooperative PVE (Player vs. Environment) environment. Players will create characters, choose classes, and engage in solo or groups against monsters out of time. The game will feature a rich lore, a variety of quests, and a deep crafting system.
+
 ## Primary Attributes
 The game will not really have races, but each of the three eras will have different "cultural" adjustments to the following "primary" attributes:
 *   **Agility:** Movement speed, reflexes, and reaction time
