@@ -7,9 +7,9 @@ import random
 import math
 import json
 from contextlib import redirect_stdout
-from mechanics.entities import Character, Monster
-from mechanics.equipment import Equipment
-from game_data import XP_FOR_LEVEL, MONSTER_BASE_XP, SPELLS
+from chronoclash_core.mechanics.entities import Character, Monster
+from chronoclash_core.mechanics.equipment import Equipment
+from chronoclash_core.game_data import XP_FOR_LEVEL, MONSTER_BASE_XP, SPELLS
 # --- Configuration ---
 HOST = '0.0.0.0' # Listen on all available network interfaces
 PORT = 8888

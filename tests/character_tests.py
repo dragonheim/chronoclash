@@ -1,4 +1,4 @@
-from mechanics import Character, Effect, INITIAL_ATTRIBUTE_POINTS, MAX_INITIAL_ALLOCATION_PER_ATTRIBUTE
+from chronoclash_core.mechanics import Character, Effect, INITIAL_ATTRIBUTE_POINTS, MAX_INITIAL_ALLOCATION_PER_ATTRIBUTE
 
 if __name__ == "__main__":
     print("========= Chrono Clash Character System Tests =========\n")
