@@ -1,5 +1,5 @@
 import pytest
-from mechanics import (
+from chronoclash_core.mechanics import (
     Character,
     Effect,
     Equipment,
