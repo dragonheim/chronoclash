@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: chronoclash-server
+    ports:
+      - "8888:8888" # Game server
+      - "8889:8889" # Status server
+    volumes:
+      - chronoclash-data:/app/data
+      - ./config.json:/app/config.json:ro # Mount config as read-only
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.webui
+    container_name: chronoclash-webui
+    ports:
+      - "5000:5000"
+    volumes:
+      - chronoclash-data:/app/data # Share the same data volume
+      - ./config.json:/app/config.json:ro # Mount config as read-only
+    depends_on:
+      - server
+    restart: unless-stopped
+
+volumes:
+  chronoclash-data:
+    # This named volume will persist the database data.
