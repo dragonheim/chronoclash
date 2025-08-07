@@ -63,6 +63,8 @@ To face the Vrathan is not to face a mere enemy; it is to confront the very natu
 
 ## Jace Sonnefeld
 ### The First Descent
+#### Faction: The Continuum Accord (Formerly)
+#### Allegiance: Vrathan
 Jace Sonnefeld had always felt the pull of time. It was a sensation that came to him in dreams—fractured glimpses of events he could not explain, moments that did not belong to his life but somehow felt familiar. When the Collision came, when reality shattered and twisted into something unrecognizable, Jace discovered that he was different. He was a Chrono-Walker, one of the few gifted—or cursed—with the ability to navigate the fractured streams of time. But even among his kind, Jace’s connection to the timestream was unique. He could feel it more acutely than most, as though time itself whispered to him, guiding his steps through the chaos.
 
 His first mission as a Chrono-Walker was to venture into the Chrono Nexus, the epicenter of the Collision. It was a place spoken of in hushed tones, where the boundaries between timelines were weakest and where the fabric of reality was most malleable. Many who entered never returned, lost in the shifting currents of time or consumed by the paradoxes that thrived there. For Jace, it was both a test and a rite of passage—a chance to prove himself worthy of the title he now bore.
@@ -134,6 +136,7 @@ And the warning to all who would follow.
 
 ## Marta Hahland
 ### The First Chrono-Walker
+#### Faction: The Parallax Order (Founder)
 Before the Collision, Marta Hahland was known only to a small circle of academics—a brilliant but reclusive linguistic scholar who had spent her life piecing together the fragmented languages and mythologies of ancient civilizations. She was fluent in over a dozen dead tongues, from Sumerian cuneiform inscriptions to the fading oral traditions of pre-Roman Celtic tribes. Her work was meticulous, obsessive, and largely ignored by mainstream academia. But it was her discovery—her translation —of an obscure set of texts hidden within disparate historical archives that would make her infamous across time.
 
 ### The Discovery
@@ -187,6 +190,7 @@ But those who have stood in the heart of the Chrono Nexus swear they’ve heard 
 
 ## Lythia Culverson
 ### The Artisan of the Fractured Ages
+#### Faction: The Iridian Forge (Aligned)
 Lythia Culverson was not born into power, nor was she a Chrono-Walker chosen by fate. She was a child of Seattle—a brilliant but unassuming engineer and arcane scholar who lived in the city long before the Collision. Her parents were both researchers at the University of Washington, specializing in ancient languages and quantum computing, respectively. Raised in an environment where the past and future collided in academic theory, Lythia developed an early fascination with blending disparate systems—particularly how ancient knowledge could inform modern innovation.
 
 Even before the world shattered, Lythia was already experimenting with unconventional combinations. While working on her doctorate in cybernetic linguistics, she began exploring the idea that certain ancient magical symbols could be used as templates for neural interfaces, believing that old spells were just forgotten forms of structured data. It was dismissed as pseudoscience… until the Collision happened.
@@ -259,6 +263,7 @@ She stands as a beacon of hope and ingenuity in Seattle, a reminder that even in
 
 ## Dr. Elias Kwan
 ### The Fracture Historian
+#### Faction: The Continuum Accord
 #### Role:
 Lore Keeper
 Quest Giver (Main Storyline)
@@ -278,6 +283,7 @@ Occasionally offers time-travel riddles—solve them for rare buffs or gear upgr
 
 ## Captain Darius Vale
 ### Commander of the Steel Sentinels
+#### Faction: The Continuum Accord
 #### Role:
 Military Leader
 PvP Trainer & Arena Coordinator
@@ -297,6 +303,7 @@ Hosts weekly Tournament Events for special rewards.
 
 ## Selene Marrow
 ### The Paradox Broker
+#### Faction: The Fracturists
 #### Role:
 Black Market Dealer
 Time-Altered Goods Vendor
@@ -316,6 +323,7 @@ Occasionally gives risk-based quests: steal from another timeline, return alive.
 
 ## Sister Evora
 ### Warden of the Temporal Orphanage
+#### Faction: Factionless
 #### Role:
 Caretaker of Timeline Orphans
 Side Quest Giver
@@ -335,6 +343,7 @@ Occasionally lets players adopt a Timeline Companion (limited-time pet/follower)
 
 ## Kael “Wires” Nakamura
 ### Technomancer & Modder Guru
+#### Faction: The Iridian Forge
 #### Role:
 Tech Wizard
 Modding Mentor
@@ -354,6 +363,8 @@ Hosts Modder Challenges where players submit creations for in-game fame and rare
 
 ## Dr. Thorne Vale
 ### The Hidden Architect
+#### Faction: The Continuum Accord (Publicly)
+#### Allegiance: Vrathan (Secretly)
 #### Role:
 False Mentor
 Quest Giver (Hidden Agenda)

@@ -1,4 +1,8 @@
 # Chrono Clash
+
+![Chrono Clash Banner](web_app/static/images/chronoclash-banner.png)
+![Chrono Clash Logo](web_app/static/images/chronoclash-logo.png)
+
 The Collision was not an accident. This is the first, terrifying truth a **Chrono-Walker** internalizes, a shard of understanding amidst the temporal chaos. The present, fractured and bleeding moments from millennia past and future, is a deliberate construct. And its architects, the silent, unseen, and all-powerful entities whispered about in the fragmented chron-data streams and apochryphal texts, are known by a name that inspires both awe and a profound, existential dread: **The Vrathan**.
 
 This project is a foundational example of an MMORPG server and a simple client. It demonstrates core concepts like basic networking, player movement on a large grid, and a character attribute system.

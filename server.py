@@ -17,6 +17,10 @@ LOG_LEVEL = logging.INFO
 STATUS_HOST = '0.0.0.0' # Listen on all available network interfaces
 STATUS_PORT = 8889
 
+# --- Game Balance Constants ---
+AP_DAMAGE_CONVERSION = 0.25 # 4 AP = +1 damage
+ARMOR_EFFECTIVENESS = 200 # A higher value makes armor less effective.
+
 # --- Setup Logging ---
 logging.basicConfig(level=LOG_LEVEL, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -973,14 +977,24 @@ class GameServer:
                         max_dmg = weapon.damage.get('max', 2)
                         base_damage = random.randint(min_dmg, max_dmg)
 
-                    # Add bonus damage from Attack Power (AP)
-                    # Using a conversion factor of 0.25 (4 AP = +1 damage)
-                    ap_bonus_damage = attacker.tertiary_attributes.get('AP', 0) * 0.25
+                    # --- New Damage Formula from GDD ---
+                    # 1. Add bonus damage from Attack Power (AP)
+                    ap_bonus_damage = attacker.tertiary_attributes.get('AP', 0) * AP_DAMAGE_CONVERSION
+                    
+                    # 2. Calculate pre-mitigation damage
+                    gross_damage = base_damage + ap_bonus_damage
 
-                    pre_mitigation_damage = base_damage + ap_bonus_damage
-
+                    # 3. Apply Armor mitigation
                     armor = defender.tertiary_attributes.get('Armor', 0)
-                    damage = max(1, round(pre_mitigation_damage - armor)) # Always do at least 1 damage
+                    armor_mitigation = 1 - (armor / (armor + ARMOR_EFFECTIVENESS))
+                    
+                    mitigated_damage = gross_damage * armor_mitigation
+
+                    # 4. TODO: Apply Damage Type Resistance mitigation
+                    # This is where you would get the weapon's damage type and check
+                    # the defender's resistance to it, further modifying the damage.
+
+                    damage = max(1, round(mitigated_damage)) # Always do at least 1 damage
 
                     defender.current_hp -= damage
 

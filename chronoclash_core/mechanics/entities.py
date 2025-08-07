@@ -104,6 +104,11 @@ class Character:
         # Armor is from equipment only (not implemented in this script version)
         calculated_tertiary["Armor"] = calculated_tertiary.get("Armor", 0) 
 
+        # --- Resistances ---
+        # Initialize all resistances to 0. Equipment can add to these.
+        calculated_tertiary["resistances"] = {res_type: 0 for res_type in DAMAGE_TYPES}
+        # TODO: Apply equipment bonuses to resistances here.
+
         self.tertiary_attributes = calculated_tertiary
 
 
@@ -347,6 +352,11 @@ class Character:
         for attr, val in self.tertiary_attributes.items():
             print(f"  {attr:<15}: {val:.2f}")
         print("Equipment:")
+        # Resistances are nested, display them separately for clarity
+        if "resistances" in self.tertiary_attributes:
+            print("Resistances:")
+            for res_type, val in self.tertiary_attributes["resistances"].items():
+                print(f"  {res_type:<15}: {val}")
         for slot, item in self.equipment.items():
             print(f"  {slot.capitalize()}: {item.name if item else 'None'}")
         if self.active_effects:

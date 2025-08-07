@@ -256,6 +256,23 @@ Combat will be divided into three categories: melee, ranged, and spellcasting. E
     *   **Abilities:** Special spells that can be used to deal additional damage, heal allies, or debuff enemies. These will have a cooldown period and require mana to use.
 
 ### Ticks
+
+### Damage Calculation Formula
+The final damage dealt by a weapon attack is calculated using the following steps. This ensures that character stats, equipment, and enemy defenses all play a role.
+
+1.  **Calculate Base Damage:**
+    *   A random value is chosen between the weapon's minimum and maximum damage.
+    *   `weapon_damage = random(weapon.min_damage, weapon.max_damage)`
+2.  **Add Attack Power Bonus:**
+    *   The character's total Attack Power (AP) adds to the base damage. A conversion factor determines how much damage 1 AP adds.
+    *   `ap_bonus = character.AP * 0.25` (i.e., 4 AP = +1 damage)
+3.  **Apply Armor Mitigation:**
+    *   The target's Armor value reduces the incoming damage. The formula provides diminishing returns, so stacking armor becomes less effective at very high values.
+    *   `armor_mitigation = 1 - (target.Armor / (target.Armor + 200))` (The `200` is an effectiveness constant that can be tuned for balance).
+4.  **Final Damage:**
+    *   `final_damage = (weapon_damage + ap_bonus) * armor_mitigation`
+    *   The result is rounded, with a minimum of 1 damage always being dealt.
+
 Combat will be based on a tick system, where each tick represents a short period of time (e.g., 3 seconds). Players and monsters will regenerate a small amount of mana and health each tick, and abilities will have a cooldown period that is based on the number of ticks. Additionally, players will be able to use abilities that can affect the number of ticks, such as reducing the cooldown period or increasing the regeneration rate.
 
 ### Damage types
