@@ -77,8 +77,14 @@ def create_logo():
 
     # Text "CHRONO"
     chrono_text = "CHRONO"
-    chrono_bbox = draw.textbbox((0,0), chrono_text, font=font_chrono)
-    chrono_w = chrono_bbox[2] - chrono_bbox[0]
+    if hasattr(draw, 'textbbox'):
+        # Modern Pillow version
+        chrono_bbox = draw.textbbox((0, 0), chrono_text, font=font_chrono)
+        chrono_w = chrono_bbox[2] - chrono_bbox[0]
+    else:
+        # Older Pillow version
+        print("Warning: Using deprecated 'textsize' method. Consider upgrading Pillow (`pip install --upgrade Pillow`).")
+        chrono_w, _ = draw.textsize(chrono_text, font=font_chrono)
     draw.text(
         ((width - chrono_w) / 2, 50),
         chrono_text,
@@ -88,8 +94,11 @@ def create_logo():
 
     # Text "CLASH"
     clash_text = "CLASH"
-    clash_bbox = draw.textbbox((0,0), clash_text, font=font_clash)
-    clash_w = clash_bbox[2] - clash_bbox[0]
+    if hasattr(draw, 'textbbox'):
+        clash_bbox = draw.textbbox((0, 0), clash_text, font=font_clash)
+        clash_w = clash_bbox[2] - clash_bbox[0]
+    else:
+        clash_w, _ = draw.textsize(clash_text, font=font_clash)
     draw.text(
         ((width - clash_w) / 2, 140),
         clash_text,
