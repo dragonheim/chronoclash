@@ -13,6 +13,7 @@
   - Tertiary Bonuses: None
   - Durability: 50/50
 
+---
   ### Makeshift Slingbow (Ranged)
   - **Description:** Crafted from salvaged tubing, strong elastic, and a sturdy stick. Fires small rocks or scrap metal with surprising force.
   - Rarity: Common
@@ -25,6 +26,7 @@
   - Tertiary Bonuses: Effectively silenced, making it useful for stealth.
   - Durability: 30/30
 
+---
 ## Uncommon Weapons
   ### Reinforced Scavenger's Axe (Melee)
   - **Description:** A firefighter's axe, its haft wrapped in leather and its edge crudely sharpened and reinforced with bolted metal plates.
@@ -38,6 +40,7 @@
   - Tertiary Bonuses: Minor chance to cause 'Bleed' DoT (3/tick for 5 ticks).
   - Durability: 40/40
 
+---
   ### Antique Hunting Rifle (Ranged)
   - **Description:** A well-maintained bolt-action rifle from a forgotten era, surprisingly accurate despite its age. Smells faintly of gun oil and cedar.
   - Rarity: Uncommon
@@ -50,6 +53,7 @@
   - Tertiary Bonuses: +5% Critical Hit Chance against unarmored targets.
   - Durability: 50/50
 
+---
 ## Rare Weapons
   ### Time-Warped Gladius (Melee)
   - **Description:** An ancient Roman gladius that shimmers with faint temporal distortions. Sometimes strikes slightly before or after it appears to.
@@ -63,6 +67,7 @@
   - Tertiary Bonuses: +10 Mana, Small chance to briefly slow target on hit.
   - Durability: 60/60 (requires uncommon materials to repair)
 
+---
   ### Mark II "Longshot" Energy Rifle (Ranged)
   - **Description:** A standard-issue energy rifle from a future military force, known for its reliability and excellent range. Its power cell hums audibly.
   - Rarity: Rare
@@ -75,7 +80,7 @@
   - Tertiary Bonuses: Ignores 10 points of target's Energy Resistance
   - Durability: 45/45 (requires uncommon materials to repair)
 
-
+---
 ## Elite Weapons
   ### Cybernetic War Maul "Skullcrusher" (Melee)
   - **Description:** A massive, two-handed maul, its head augmented with kinetic amplifiers and gravitic pulse emitters. Each swing feels like it could shatter reality.
@@ -89,6 +94,7 @@
   - Tertiary Bonuses: +25 HP, High chance to knock down or stagger targets on critical hits.
   - Durability: 70/70 (requires rare materials to repair)
 
+---
   ### Hex-Forged "Soul Siphon" Repeating Crossbow (Ranged)
   - **Description:** A crossbow crafted from dark, pulsating wood and enchanted metal. Its bolts are imbued with life-draining magic and seem to whisper as they fly.
   - Rarity: Elite
@@ -101,6 +107,7 @@
   - Tertiary Bonuses: Hits drain a small amount of Mana from the target and restore it to the wielder.
   - Durability: 40/40 (requires rare materials to repair)
 
+---
   ### "Noriko" Needlegun (Ranged)
   - **Description:** Early generation needlegun using a combination of explosive and electromagnetic technology. Fires specialized needles that can penetrate armor and deliver devastating impacts.
   - Rarity: Elite
@@ -126,6 +133,7 @@
   - Tertiary Bonuses: +50 Mana, +10 Dodge. On critical hit, has a chance to apply "Unmaking" debuff (reduces target's resistances).
   - Durability: 80/80 (requires rare materials to repair)
 
+---
   ### "Chronos Railgun" Model Zero (Ranged)
   - **Description:** An experimental weapon of immense power, rumored to fire projectiles accelerated through localized time-dilation fields, hitting with catastrophic impact. Its recoil can distort local spacetime momentarily.
   - Rarity: Legendary
@@ -138,6 +146,7 @@
   - Tertiary Bonuses: +75 HP. Shots have a chance to create a brief area of slowed time around the impact point.
   - Durability: 100/100 (requires elite materials to repair)
 
+---
   ### "Rage Gun" (Ranged)
   - **Description:** This weapon is a prototype dart gun that fires specialized darts designed to induce a state of extreme aggression in the target.
   - Rarity: Legendary
@@ -151,6 +160,7 @@
   - Durability: 100/100 (requires legendary materials to repair)
 
 
+---
 Considerations for Damage Calculation:
 Now that you have base damage for weapons, you'll need a damage formula. A common approach is:
 Final Damage = (Weapon_Base_Damage + (Character_Total_AP * AP_to_Damage_Conversion_Factor)) * (1 - (Target_Armor_Value / (Target_Armor_Value + Armor_Effectiveness_Constant))) * Other_Multipliers

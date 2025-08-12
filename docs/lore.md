@@ -70,6 +70,7 @@ Regardless of their motives, the Vrathan are not passive architects. They are th
 
 To face the Vrathan is not to face a mere enemy; it is to confront the very nature of time, causality, and reality. They are the enigma at the heart of the shattered world, their motives as obscure as their forms, their power as vast as time itself. For the Chrono-Walkers, discovering the truth of the Vrathan is not just a matter of curiosity; it is intrinsically linked to the fate of all timelines, the survival of humanity, and the desperate, perhaps impossible, hope of choosing a future from the echoes of the past. Their awesome abilities are the very laws of the new, broken reality, and understanding them is the first step towards navigating – and perhaps, one day, defying – their inscrutable will.
 
+---
 ## Jace Sonnefeld
 ### The First Descent
 #### Faction: The Continuum Accord (Formerly)
@@ -146,6 +147,7 @@ And the warning to all who would follow.
 ### Prompt:
 A highly detailed character concept art portrait of the terrifying Chrono-Mummy, formerly Jace Sonnefeld. The figure is a desiccated, embalmed corpse wrapped in bandages that are not cloth, but flickering, semi-transparent temporal after-images of Jace's life. It moves with a lurching, unnatural speed. Its eyes are not eyes, but deep, black voids filled with shifting points of light, like galaxies. It is raising a hand, from which a curse of decaying time emanates. The background is the heart of the Chrono Nexus—a chaotic, M.C. Escher-like realm of floating rock islands and raw, swirling temporal energy. The lighting is chaotic and harsh. The mood is one of tragic horror and immense, unnatural power.
 
+---
 ## Marta Hahland
 ### The First Chrono-Walker
 #### Faction: The Parallax Order (Founder)
@@ -203,6 +205,7 @@ But those who have stood in the heart of the Chrono Nexus swear they’ve heard 
 
 “I am still translating.” 
 
+---
 ## Lythia Culverson
 ### The Artisan of the Fractured Ages
 #### Faction: The Iridian Forge (Aligned)
@@ -279,6 +282,7 @@ Lythia Culverson is more than just a quest-giver. She is the embodiment of the p
 
 She stands as a beacon of hope and ingenuity in Seattle, a reminder that even in a world torn apart by time, the human spirit can still create beauty, power, and purpose from the ruins.
 
+---
 ## Dr. Elias Kwan
 ### The Fracture Historian
 #### Faction: The Continuum Accord
@@ -302,6 +306,7 @@ Provides main story quests tied to unraveling the origins of the Vrathan.
 Sells Lore Logs and Temporal Scrolls that reveal hidden truths about zones or monsters.
 Occasionally offers time-travel riddles—solve them for rare buffs or gear upgrade components.
 
+---
 ## Captain Darius Vale
 ### Commander of the Steel Sentinels
 #### Faction: The Continuum Accord
@@ -309,8 +314,10 @@ Occasionally offers time-travel riddles—solve them for rare buffs or gear upgr
 Military Leader
 PvP Trainer & Arena Coordinator
 Veteran Gear Vendor
+
 #### Location:
 Former Seattle Armory (now the base of the Steel Sentinels)
+
 #### Description:
 A grizzled ex-Marine who survived the Collision by leading a squad through a horde of cybernetic dinosaurs, Captain Vale now commands the Steel Sentinels, a militia dedicated to defending Seattle from rogue Chrono-Walkers and timeline beasts.
 
@@ -325,6 +332,7 @@ Runs PvP Arenas where players can test their builds.
 Offers ranked titles and battle-hardened gear .
 Hosts weekly Tournament Events for special rewards.
 
+---
 ## Selene Marrow
 ### The Paradox Broker
 #### Faction: The Fracturists
@@ -332,8 +340,10 @@ Hosts weekly Tournament Events for special rewards.
 Black Market Dealer
 Time-Altered Goods Vendor
 Bazaar Manager
+
 #### Location:
 Underground bazaar beneath Pike Place Market
+
 #### Description:
 Selene is a woman caught between timelines—her left side appears aged fifty years, while her right remains young. She claims she was bisected by a paradox storm and stitched herself back together using nanite-thread. She deals in items that should not exist: future weapons forged in the past, enchanted relics powered by fusion cores, and spells that rewrite memory.
 
@@ -348,6 +358,7 @@ Offers weekly rotating exotic gear schematics and paradox artifact schematics.
 Requires Chrono Shards or Paradox Tokens to purchase.
 Occasionally gives risk-based quests: steal from another timeline, return alive.
 
+---
 ## Sister Evora
 ### Warden of the Temporal Orphanage
 #### Faction: Factionless
@@ -373,6 +384,7 @@ Offers side quests involving rescuing lost children or retrieving memories.
 Teaches support abilities like healing chants, protective wards, and empathy-based debuffs.
 Occasionally lets players adopt a Timeline Companion (limited-time pet/follower).
 
+---
 ## Kael “Wires” Nakamura
 ### Technomancer & Modder Guru
 #### Faction: The Iridian Forge
@@ -398,6 +410,7 @@ Teaches modding basics, including item stat tweaking and UI customization.
 Allows players to create custom macros, visual effects, and class hybridizations.
 Hosts Modder Challenges where players submit creations for in-game fame and rare schematics.
 
+---
 ## Dr. Thorne Vale
 ### The Hidden Architect
 #### Faction: The Continuum Accord (Publicly)

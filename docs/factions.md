@@ -20,6 +20,7 @@ Not all interactions follow the standard rules. Certain epic quests, dynamic wor
 ### Reputation and The Chrono Nexus
 Gaining access to the endgame zone, the Chrono Nexus, is a significant milestone. To begin the attunement quest, **"The Final Translation,"** a player must first prove their dedication to a cause by achieving a **Reputation score of 100 (Exalted)** with at least one of the major factions. This demonstrates your character's commitment to a specific philosophy for shaping the future of the fractured world.
 
+## The Factions
 ### 1. The Continuum Accord
 #### Philosophy:
 The Accord seeks to restore stability to the fractured timelines and protect Seattle from further temporal chaos. They value order, scientific inquiry, and the preservation of human civilization.
@@ -72,6 +73,7 @@ Though both want to “fix” the timeline, the Accord believes the Forge is dan
 * Assassinations of destabilizing Walkers
 * Diplomatic sabotage of Iridian efforts to rally the fractured zones
 
+---
 ### 2. The Fracturists
 #### Philosophy:
 Embrace the broken timelines; splinters bring opportunity.
@@ -124,6 +126,7 @@ Fracturists see them as cowardly fence-sitters, unwilling to seize the power lai
 * Open recruitment within Continuum territory
 * Data corruption strikes on Parallax Archives
 
+---
 ### 3. The Parallax Order
 #### Philosophy:
 Observe and manipulate timelines from the outside — maintain balance but never interfere directly unless absolutely necessary.
@@ -176,6 +179,7 @@ The Parallax Order worries the Echobound may unintentionally awaken echoes too d
 * Strategic containment of Chrono-Rifts
 * Temporal surveillance operations to track faction moves
 
+---
 ### 4. The Echobound
 #### Philosophy:
 Draw power from temporal echoes — remnants of timelines that never were or are yet to be.
@@ -228,6 +232,7 @@ The Echobound claim the Order’s refusal to act causes more harm than good, acc
 * Echo-pulse disruptions of Accord facilities
 * Occult propaganda inscribed into timestreams
 
+---
 ### 5. The Iridian Forge
 #### Philosophy:
 Reforge the timeline into something better — even if it means rewriting the past.
@@ -280,6 +285,7 @@ The Forge resents the Order’s omnipresence and passive judgment. They believe 
 * Targeted sabotage of Parallax observatories
 * Recruiting promising Walkers away from Accord training camps
 
+---
 ### 6. The Steel Sentinels
 #### Philosophy:
 Defend Seattle and its people against threats from fractured timelines, monsters, and rogue Walkers. Survival and order above all.
@@ -333,7 +339,6 @@ Tension over experimental tech and risk-taking; Sentinels prefer proven methods 
 * Emergency response to Fracturist attacks
 
 ---
-
 ### 7. The Paradox Brokers
 #### Philosophy:
 Profit from the chaos by trading in time-altered goods, forbidden knowledge, and paradox artifacts. Opportunity in uncertainty.
@@ -387,7 +392,6 @@ Sentinels crack down on illegal goods and paradox trading, leading to frequent r
 * Blackmail and information wars
 
 ---
-
 ### 8. The Temporal Orphanage
 #### Philosophy:
 Care for those displaced by the Collision—children, lost souls, and beings from broken timelines. Compassion and healing above all.
@@ -441,7 +445,6 @@ Occasional tension over priorities—defense vs. rescue—but often cooperate in
 * Healing and support for traumatized NPCs
 
 ---
-
 ### 9. The Modder Commune
 #### Philosophy:
 Push the boundaries of reality by merging technology, magic, and code. Innovation through experimentation and collaboration.
