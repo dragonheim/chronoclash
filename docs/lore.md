@@ -2,25 +2,34 @@
 ## The Collision: A Fractured Reality
 The Collision is the cataclysmic event that shattered the fabric of reality, merging three discreet timelines into a single, chaotic continuum. It is the origin of the Chrono-Walkers, those who traverse the fractured streams of time, seeking to understand and navigate the new world born from this temporal catastrophe.
 
-The Collision occurred when the timelines of three distinct eras – the ancient past, the near future, and a distant, post-apocalyptic future – converged in a cataclysmic event. This convergence was not a natural occurrence but rather the result of an unknown force or entity, later identified as the Vrathan, who orchestrated this merging for reasons yet to be fully understood.
+At 10:07AM Pacific time, the Collision occurred with the timelines of three distinct eras – the ancient past, the near future, and a distant, post-apocalyptic future – converged in a cataclysmic event. This convergence was not a natural occurrence but rather the result of an unknown force or entity, later identified as the Vrathan, who orchestrated this merging for reasons yet to be fully understood.
 
 The event itself was a violent upheaval, a cosmic collision that tore apart the very fabric of existence. Time and space warped and twisted, creating a new reality where the laws of physics were inconsistent, and the boundaries between past, present, and future became blurred. The result was a world where ancient civilizations coexisted with futuristic technology, where dinosaurs roamed alongside remnants of advanced societies, and where the echoes of long-lost eras could be felt in every corner of this new reality.
 
 ## The Nature of the Collision
-The Collision is not merely a historical event; it is the defining moment of existence in this new reality. It is the point where past, present, and future collided, creating a tapestry of overlapping timelines, each with its own history, culture, and potential. The result is a world where the laws of physics are inconsistent, where time can flow backward or sideways, and where the boundaries between eras blur.
+The Collision is not merely a historical event; it is the defining moment of existence in this new reality—a complex, multi-layered phenomenon where multiple timelines converged, each with its own unique history and trajectory. The merging of these timelines created a fractured world in flux, where the laws of physics are inconsistent and the boundaries between past, present, and future blur.
+
+Time is no longer linear; it flows backward, sideways, and in unpredictable patterns. Temporal anomalies and paradoxes are common, with events from different eras intersecting to produce dangerous and often mysterious effects. The very fabric of existence has been reshaped, leading to phenomena such as temporal storms—fragments of timelines colliding and creating unpredictable consequences.
+
+In this tangled web of possibilities, Chrono-Walkers and ordinary humans alike must navigate a reality where echoes of long-lost eras can be felt in every corner, and where the future is as unstable as the past.
+
+## Timeline Mechanics: Living in a Fractured Reality
+
+In the post-Collision world, time does not flow in a single direction. Instead, it behaves unpredictably—sometimes reversing, looping, or splitting into parallel streams. This instability affects daily life in dramatic ways:
+
+- **Temporal Storms:** Sudden eruptions of temporal energy can shift entire city blocks into different eras for minutes or days. Residents may find themselves surrounded by prehistoric jungles, futuristic ruins, or medieval fortresses until the storm subsides.
+- **Paradox Zones:** Certain areas, known as Paradox Zones, experience overlapping events from multiple timelines. In these places, a person might encounter their past or future self, or witness historical events replaying with new outcomes.
+- **Era Bleed:** Objects and creatures from different times coexist. It’s common to see Roman legionnaires patrolling alongside cyborgs, or dinosaurs roaming near advanced technology.
+- **Personal Time Flux:** Individuals may experience time differently. Some age rapidly or regress in years, while others become “unstuck,” living moments out of order or remembering events that have not yet happened.
+- **Gameplay Impact:** Players must adapt to shifting environments, solve puzzles based on temporal logic, and use abilities that manipulate time—such as rewinding actions, pausing local time, or glimpsing possible futures.
+
+These mechanics create a world where cause and effect are fluid, and survival depends on understanding and navigating the fractured tapestry of time.
 
 ## The Chrono-Walkers: Guardians of the Fractured Tapestry
 The Chrono-Walkers are the inheritors of the Collision, a new breed of human capable of perceiving and manipulating the fractured timelines. They are not mere time travelers; they are temporal navigators, scholars, and warriors, dedicated to understanding the nature of the Collision and protecting the fragile threads of reality from further unraveling.
 Chrono-Walkers possess a unique ability to perceive the echoes of past and future events, allowing them to navigate the chaotic streams of time. They can see glimpses of what was, what is, and what could be, granting them insights into the nature of reality that ordinary humans cannot comprehend. This ability is both a blessing and a curse, as it exposes them to the dangers of temporal anomalies and paradoxes that can arise from their actions.
 
 Their abilities are a gift and a curse, allowing them to traverse the chaotic streams of time but also exposing them to the dangers of temporal anomalies, paradoxes, and the ever-present threat of the Vrathan, the enigmatic architects of the Collision.
-
-## The Nature of the Collision
-The Collision is not a singular event but a complex, multi-layered phenomenon. It is the result of multiple timelines converging, each with its own unique history and trajectory. The merging of these timelines has created a reality where the past, present, and future coexist in a state of flux, leading to a chaotic and unpredictable world.
-
-The Collision has resulted in a fractured reality, where the laws of physics are inconsistent, and the boundaries between past, present, and future are blurred. Time can flow backward or sideways, and the echoes of long-lost eras can be felt in every corner of this new reality. This has led to the emergence of temporal anomalies, where events from different timelines intersect, creating unpredictable and often dangerous effects.
-
-The Collision has not only altered the physical laws of the universe but has also reshaped the very fabric of existence. Time is no longer linear; it is a tangled web of possibilities, where events can influence each other across different eras. This has led to the emergence of new phenomena, such as temporal storms, where fragments of different timelines collide, creating unpredictable and often dangerous effects.
 
 ## The Chrono Nexus: Heart of the Collision
 The Chrono Nexus is the epicenter of the Collision, a place where the boundaries between timelines are weakest and where the fabric of reality is most malleable. It is a realm of paradoxes, where time flows in multiple directions, and where the past, present, and future can be glimpsed simultaneously.
@@ -134,6 +143,9 @@ The first Chrono-Mummy.
 
 And the warning to all who would follow.
 
+### Prompt:
+A highly detailed character concept art portrait of the terrifying Chrono-Mummy, formerly Jace Sonnefeld. The figure is a desiccated, embalmed corpse wrapped in bandages that are not cloth, but flickering, semi-transparent temporal after-images of Jace's life. It moves with a lurching, unnatural speed. Its eyes are not eyes, but deep, black voids filled with shifting points of light, like galaxies. It is raising a hand, from which a curse of decaying time emanates. The background is the heart of the Chrono Nexus—a chaotic, M.C. Escher-like realm of floating rock islands and raw, swirling temporal energy. The lighting is chaotic and harsh. The mood is one of tragic horror and immense, unnatural power.
+
 ## Marta Hahland
 ### The First Chrono-Walker
 #### Faction: The Parallax Order (Founder)
@@ -160,6 +172,9 @@ She called it the Temporal Echo , and she realized she was no longer bound by co
 Marta quickly understood that the Collision had created more than chaos—it had created a new kind of reality, one where the laws of time were mutable and where those who could perceive the fractures might wield power over them. She gathered survivors—scientists, mystics, soldiers, engineers—and taught them what she had learned. Together, they formed the Order of the Chrono-Walkers , dedicated to studying the nature of the Collision, understanding the Vrathan, and protecting humanity from the temporal storms that threatened to unravel existence.
 
 Marta’s knowledge of ancient languages made her uniquely attuned to the Vrathan’s influence. She believed their presence was not random—that the way they shaped timelines followed patterns embedded in language, ritual, and myth. She led expeditions into the Chrono Nexus, decoding glyphs left behind by beings older than time itself. With each journey, she grew more certain: the Vrathan were not gods, nor demons. They were something else entirely—weavers of possibility , sculptors of causality.
+
+#### Prompt:
+A highly detailed character concept art portrait of Marta Hahland in her prime as the founder of the Parallax Order. She is a brilliant, intense woman in her 40s with sharp, perceptive eyes. She wears practical but scholarly attire, like a long coat over academic robes. She stands before a massive blackboard covered in a complex web of linguistic translations, temporal equations, and the first-ever transcribed Vrathan glyphs. The background is her dimly lit study, filled with rare books and ancient artifacts. The lighting is focused on her and the blackboard, casting deep shadows elsewhere. The overall mood is one of groundbreaking, forbidden discovery. 
 
 ### The Price of Knowing
 But knowing came at a cost.
@@ -194,6 +209,9 @@ But those who have stood in the heart of the Chrono Nexus swear they’ve heard 
 Lythia Culverson was not born into power, nor was she a Chrono-Walker chosen by fate. She was a child of Seattle—a brilliant but unassuming engineer and arcane scholar who lived in the city long before the Collision. Her parents were both researchers at the University of Washington, specializing in ancient languages and quantum computing, respectively. Raised in an environment where the past and future collided in academic theory, Lythia developed an early fascination with blending disparate systems—particularly how ancient knowledge could inform modern innovation.
 
 Even before the world shattered, Lythia was already experimenting with unconventional combinations. While working on her doctorate in cybernetic linguistics, she began exploring the idea that certain ancient magical symbols could be used as templates for neural interfaces, believing that old spells were just forgotten forms of structured data. It was dismissed as pseudoscience… until the Collision happened.
+
+#### Prompt:
+A highly detailed character concept art portrait of the brilliant and eccentric Lythia Culverson. She has a smudge of grease on her cheek, her hair is tied back messily, and she wears safety goggles pushed up on her forehead. Her attire is a mix of a practical leather apron over modern engineer's clothes. She is excitedly examining a complex device in her hands—a fusion of an ancient, rune-etched artifact and futuristic, glowing cybernetics. Her workshop behind her is a chaotic but brilliant mess of tools, spare parts, ancient relics, and holographic schematics. The lighting is warm and cluttered. The mood is one of creative genius and fearless innovation.
 
 ### The Collision and the Birth of a New Discipline
 When the timelines collapsed into one another, Lythia found herself uniquely attuned to the chaos—not because she could walk through time like the Chrono-Walkers, but because she understood how different technologies and magics might harmonize. Where others saw only destruction and confusion, she saw patterns—ways in which ancient runes could stabilize temporal rifts, or how nanotechnology could mimic the effects of alchemical transmutation.
@@ -273,6 +291,9 @@ Seattle University Library Ruins (converted into a Chrono-Walker Archive)
 #### Description:
 A former theoretical physicist turned temporal archivist, Dr. Elias Kwan is obsessed with cataloging the remnants of pre-Collision history. He believes that understanding what was lost is the key to surviving what has been gained. He speaks in riddles and equations, often quoting ancient philosophers while adjusting his holographic monocle.
 
+#### Prompt:
+A highly detailed character concept art portrait of Dr. Elias Kwan, the obsessive temporal archivist of the Continuum Accord. He is a middle-aged man with a wiry frame, wearing a tweed academic jacket over a high-tech vest. He wears a holographic monocle over one eye that projects faint, glowing data streams. He is surrounded by stacks of ancient books, scattered scrolls, and floating, transparent data screens displaying complex equations. The background is the ruins of a university library, now serving as a makeshift archive. The lighting is warm, like a desk lamp cutting through the dusty, shadowed room. The overall mood is one of intense intellectual curiosity and scholarly obsession.
+
 #### Key Dialogue:
 “Time is not broken—it is remembered poorly. You are the witness. Now bear it.” 
 
@@ -292,6 +313,9 @@ Veteran Gear Vendor
 Former Seattle Armory (now the base of the Steel Sentinels)
 #### Description:
 A grizzled ex-Marine who survived the Collision by leading a squad through a horde of cybernetic dinosaurs, Captain Vale now commands the Steel Sentinels, a militia dedicated to defending Seattle from rogue Chrono-Walkers and timeline beasts.
+
+#### Prompt:
+A highly detailed character concept art portrait of Commander Darius Vale, the battle-hardened leader of the Steel Sentinels. He is a rugged man in his late 40s with a square jaw, short-cropped hair, and a scar across his brow. He wears functional, heavy combat armor of dark grey steel, emblazoned with the Sentinels' shield-and-star insignia. The armor is scuffed and worn from battle. He stands at attention, his expression one of grim determination. The background is a military command center within the Seattle Armory, with holographic maps of the city and tactical displays behind him. The lighting is stark and utilitarian. The overall mood is one of unwavering strength and vigilance.
 
 #### Key Dialogue:
 “You want to fight in the Nexus? First you prove you can survive me.” 
@@ -313,6 +337,9 @@ Underground bazaar beneath Pike Place Market
 #### Description:
 Selene is a woman caught between timelines—her left side appears aged fifty years, while her right remains young. She claims she was bisected by a paradox storm and stitched herself back together using nanite-thread. She deals in items that should not exist: future weapons forged in the past, enchanted relics powered by fusion cores, and spells that rewrite memory.
 
+#### Prompt:
+A highly detailed character concept art portrait of Selene Marrow, the cunning leader of the Paradox Brokers. Her body is a living paradox: the right side of her face and body is that of a youthful, beautiful woman, while the left side is wrinkled, aged, and scarred. She wears exotic, expensive clothing that blends styles from multiple eras seamlessly. She has a sly, knowing smile. The background is her stall in a bustling, shadowy underground bazaar, filled with impossible artifacts for sale: a glowing sword, a futuristic rifle, and a jar containing a miniature temporal storm. The lighting is a neon-noir mix from the bazaar's signs. The mood is one of cunning, mercantile unpredictability.
+
 #### Key Dialogue:
 “I don’t sell things. I trade possibilities. What’s your gamble worth?” 
 
@@ -328,10 +355,15 @@ Occasionally gives risk-based quests: steal from another timeline, return alive.
 Caretaker of Timeline Orphans
 Side Quest Giver
 Support Ability Trainer
+
 #### Location:
 Converted Church near the Space Needle
+
 #### Description:
 Once a nun in a medieval abbey, Sister Evora was pulled forward during the Collision and now cares for children displaced across time—some born centuries apart, others not even human. She teaches compassion in a world ruled by chaos and loss.
+
+#### Prompt:
+A highly detailed character concept art portrait of Sister Evora, the compassionate caretaker of the Temporal Orphanage. She is a woman with a gentle but resolute face, her eyes filled with kindness and sorrow. She wears simple, clean robes reminiscent of a nun's habit, but made from practical, modern fabrics. She is holding a warm, glowing lantern in one hand and has her other hand on the shoulder of a small, displaced child from a different era. The background is the quiet, warm interior of the converted church that serves as the orphanage, with soft light filtering through a stained-glass window. The overall mood is one of hope, compassion, and sanctuary in a broken world.
 
 #### Key Dialogue:
 “The future may be broken, but hope still fits in small hands.” 
@@ -348,10 +380,15 @@ Occasionally lets players adopt a Timeline Companion (limited-time pet/follower)
 Tech Wizard
 Modding Mentor
 Customization Expert
+
 #### Location:
 Abandoned Microsoft campus converted into a hacker commune
+
 #### Description:
 Kael is a genius-level modder who merges arcane runes with quantum code. He runs a community workshop where players can learn how to customize their gear, enhance implants, and even tweak game mechanics via Python scripts (for those playing on mod-enabled servers). His nickname comes from the glowing cables embedded in his skin.
+
+#### Prompt:
+A highly detailed character concept art portrait of Kael "Wires" Nakamura, the visionary leader of the Modder Commune. He is a young, confident man with a rebellious smirk. His most prominent feature is the set of glowing, fiber-optic cables embedded in his skin, running along his arms and neck. He wears stylish, custom tech-wear with glowing circuit patterns. He is manipulating a floating holographic interface with his hands. The background is a hacker's paradise: a room with multiple monitors scrolling with code, custom-built computer hardware, and vibrant neon lighting. The mood is one of rebellious creativity and technological mastery.
 
 #### Key Dialogue:
 “Code is just magic that forgot its name.”
@@ -369,14 +406,19 @@ Hosts Modder Challenges where players submit creations for in-game fame and rare
 False Mentor
 Quest Giver (Hidden Agenda)
 Vrathan Sympathizer
+
 #### Location:
 Seattle, beneath the ruins of a pre-Collision university science lab
+
 #### Description:
 Dr. Thorne Vale appears to be a brilliant but eccentric scientist who has dedicated his life to understanding the Collision and unlocking its secrets. He is calm, articulate, and deeply charismatic, often speaking in metaphors that hint at truths just beyond human comprehension. To most players, he seems like a valuable ally—someone who can provide insight into the nature of time, the Chrono Nexus, and even the Vrathan themselves.
 
 But beneath his scholarly exterior lies a chilling truth: Thorne Vale is not just a scholar of the Vrathan—he is their disciple . Unlike those who fear or resist the Vrathan, Thorne sees them as divine architects, creators of a new cosmic order born from chaos. He believes that humanity’s only hope lies in embracing the destruction of the old timelines and surrendering to the inevitable evolution of existence.
 
 To him, the Chrono-Walkers are not heroes—they are obstacles. And yet, he does not oppose them directly. Instead, he manipulates them , offering quests that seem noble and heroic but ultimately serve the Vrathan’s hidden agenda.
+
+#### Prompt:
+A highly detailed character concept art portrait of Dr. Thorne Vale, the secret Vrathan sympathizer. He appears as a handsome, charismatic, and scholarly man in his 50s. He wears a long, elegant coat made of a strange fabric that subtly shifts between looking like old-world tweed and futuristic smart-fabric. He has a calm, knowing smile that doesn't quite reach his eyes, which have a faint, almost imperceptible, otherworldly glow. The background is his subterranean laboratory, filled with strange, humming devices that fuse ancient stone monoliths with advanced, sparking technology. The lighting is low-key and sinister. The mood is one of deceptive charm and chilling, alien intellect.
 
 #### Key Dialogue:
 “You think you’re restoring balance? You’re only reinforcing the illusion of control. Let go. Become part of the weave.” 

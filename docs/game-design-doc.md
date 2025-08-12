@@ -346,6 +346,32 @@ Sprinting will temporarily decrease the player's energy pool, which will regener
 
 Monsters will also be able to sprint, but only when chasing down players or escaping from combat. Monsters will have a set of sprinting abilities that can be used to increase their movement speed for a short period of time.
 
+## Factions and Reputation
+In Chrono Clash, players do not formally join a single faction. Instead, their relationship with each group is measured by **Reputation**. A player's actions—from completing quests and defeating specific enemies to making critical narrative choices—will either earn them favor or draw ire from the various factions.
+
+### Reputation Mechanics
+*   **Gaining Reputation:** Successfully aiding a faction unlocks access to their unique vendors, rewards, questlines, and lore.
+*   **Losing Reputation:** Actions that hinder a faction will lower your standing, potentially making their members hostile and locking you out of their services.
+*   **Standard Reputation Change:**
+    *   **Primary Gain:** Typically, completing a quest for a faction grants **+2 Reputation** with them.
+    *   **Conflicting Loss:** Simultaneously, the player will lose **-1 Reputation** with each of that faction's primary rivals.
+
+### Major Factions
+The world is shaped by the philosophies and conflicts of several major factions:
+1.  **The Continuum Accord:** Seek to restore and stabilize the timeline. Value order and preservation.
+2.  **The Fracturists:** Embrace the chaos of the fractured timelines, seeing it as an opportunity for evolution.
+3.  **The Parallax Order:** Observe and maintain balance from the outside, interfering only when absolutely necessary.
+4.  **The Echobound:** Draw power from temporal echoes and lost moments, viewing memories as sacred.
+5.  **The Iridian Forge:** Aim to reforge the timeline into something better, even if it means rewriting the past.
+6.  **The Steel Sentinels:** A militaristic group focused on defending Seattle and its people from all threats.
+7.  **The Paradox Brokers:** A neutral, mercantile faction profiting from the chaos by trading in rare artifacts.
+8.  **The Temporal Orphanage:** A compassionate group dedicated to caring for those displaced by the Collision.
+9.  **The Modder Commune:** A rebellious group of tinkerers who push the boundaries of reality by merging tech and magic.
+
+### Endgame and Reputation
+Gaining access to the endgame zone, the **Chrono Nexus**, requires a significant display of commitment to a faction's cause.
+*   **Attunement Quest:** To begin the quest **"The Final Translation,"** a player must first achieve a **Reputation score of 100 (Exalted)** with at least one of the major factions.
+
 ## User Interface
 The user interface will be designed to be intuitive and easy to use. The main screen will display the player's character, their health and mana bars, and their action bar. The action bar will contain the player's abilities and spells, which can be used in combat. Additionally, the user interface will include a minimap, which will display the player's location and the locations of nearby monsters and players.
 

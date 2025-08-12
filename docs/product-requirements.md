@@ -55,6 +55,9 @@ This document outlines the product requirements for the initial release (Minimum
     *   **FR-3.2.3.4:** The system must support buff and debuff spells that modify secondary attributes.
 *   **FR-3.2.4: Character State:**
     *   **FR-3.2.4.1:** A character flag system must be implemented to track states (e.g., Is Dead, Is In Combat, Is Stunned).
+*   **FR-3.2.5: Faction Reputation:**
+    *   **FR-3.2.5.1:** A reputation system must be implemented to track player standing with the various in-game factions.
+    *   **FR-3.2.5.2:** Quest completion and specific actions must be able to grant positive reputation with one faction while granting negative reputation with rival factions.
 
 ### 3.3. World & Environment
 
@@ -121,6 +124,7 @@ This document outlines the product requirements for the initial release (Minimum
 *   Core combat, leveling, and questing mechanics.
 *   At least two zones: Seattle and Echo Vale.
 *   Basic crafting, gathering, and salvaging.
+*   Faction & Reputation System (Core Mechanics and UI).
 *   Player-made equipment system.
 *   Player-to-player trading.
 *   Party system.
@@ -135,6 +139,7 @@ This document outlines the product requirements for the initial release (Minimum
 *   PvP Arenas.
 *   Guild and Raid systems..
 *   Auction House.
+*   Full questlines for all 9 factions (MVP will focus on initial interactions).
 *   Advanced NPC AI and boss mechanics.
 *   Additional zones (Neo-Babylon, Silicon Desert, etc.).
 *   Graphical client (initial client is simple Unreal Engine 5 with 3D assets).

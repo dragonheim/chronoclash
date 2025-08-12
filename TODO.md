@@ -114,14 +114,9 @@ Temporal rifts as zone transitions or teleportation points.
 A. Endgame Structure:
 No endgame content outlined beyond level 20.
 Add:
-Mythic dungeons or raid bosses.
-PvP arenas or ranked seasons.
-Time Trials or Paradox Challenges in the Chrono Nexus.
-B. Reputation and Factions:
-No faction system defined despite Vrathan and Chrono-Walker lore.
-Include:
-Reputation gains with factions (Vrathan, Chrono-Walkers, rogue tech groups).
-Faction-exclusive gear or abilities.
+    *   Mythic dungeons or raid bosses.
+    *   PvP arenas or ranked seasons.
+    *   Time Trials or Paradox Challenges in the Chrono Nexus.
 
 🎮 8. User Interface and UX Enhancements
 ❗ Areas to Improve:
