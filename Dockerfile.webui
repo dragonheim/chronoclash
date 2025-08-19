@@ -1,6 +1,13 @@
+# Dockerfile for the Chrono Clash Web UI
+
 # Use an official Python runtime as a parent image for a lean final image.
 # FROM python:3.10-slim
 FROM python:3.11-alpine
+
+# Set environment variables to make Python run better inside Docker
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH="${PYTHONPATH}:/app"
 
 # Set the working directory inside the container.
 WORKDIR /app
@@ -9,7 +16,7 @@ WORKDIR /app
 COPY requirements-webui.txt .
 
 # Install the Python dependencies.
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements-webui.txt
 
 # Copy the application code into the container.
 COPY web_app.py .

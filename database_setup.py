@@ -128,6 +128,17 @@ def setup_database():
                 FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE,
                 FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE
             );
+
+            -- Spells table
+            CREATE TABLE IF NOT EXISTS spells (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL UNIQUE,
+                type TEXT NOT NULL,
+                mana_cost INTEGER NOT NULL,
+                cooldown INTEGER NOT NULL,
+                requires_combat BOOLEAN NOT NULL DEFAULT 0,
+                archetype_mods TEXT
+            );
         """
         cursor.executescript(schema_script)
         logging.info("Core tables created or already exist.")
@@ -184,6 +195,16 @@ def setup_database():
         """
         cursor.executescript(item_script)
         logging.info("Initial items populated.")
+
+        # --- Populate with initial spell data ---
+        spell_script = """
+            INSERT OR IGNORE INTO spells (name, type, mana_cost, cooldown, requires_combat, archetype_mods)
+            VALUES ('rejuvenate', 'heal', 10, 15, 0, '{"Healer": 0.50, "Tank": 0.33, "DPS": 0.25}');
+            INSERT OR IGNORE INTO spells (name, type, mana_cost, cooldown, requires_combat, archetype_mods)
+            VALUES ('chrono-blast', 'damage', 15, 5, 1, '{"DPS": 0.50, "Tank": 0.33, "Healer": 0.25}');
+        """
+        cursor.executescript(spell_script)
+        logging.info("Initial spells populated.")
 
         conn.commit()
         conn.close()

@@ -4,7 +4,7 @@ import asyncio
 from .constants import *
 from .effects import Effect
 from .equipment import Equipment
-from game_data import XP_FOR_LEVEL, MAX_LEVEL
+from chronoclash_core.game_data import XP_FOR_LEVEL, MAX_LEVEL
 
 
 class Character:

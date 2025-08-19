@@ -1104,28 +1104,6 @@ async def main():
     server = GameServer(HOST, PORT, STATUS_HOST, STATUS_PORT)
     await server.start()
 
-def start_server_with_asyncio():
-    """A synchronous wrapper to start the asyncio event loop for hupper."""
-    asyncio.run(main())
-
 if __name__ == "__main__":
-    # Add auto-reloading for development.
-    # To run without the reloader, pass the `--no-reload` flag.
-    if "--no-reload" not in sys.argv:
-        try:
-            import hupper
-            logging.info("Starting server with auto-reloader...")
-            # The reloader will watch for file changes and restart the worker process.
-            # We point it to a synchronous function that runs our async main().
-            reloader = hupper.start_reloader('server.start_server_with_asyncio')
-            reloader.wait()  # This blocks until Ctrl+C is pressed.
-        except ImportError:
-            logging.warning("`hupper` not installed. Running without auto-reloader.")
-            logging.warning("Install it with: pip install hupper")
-            asyncio.run(main())
-        except KeyboardInterrupt:
-            # The reloader handles shutdown, but we catch this to prevent a traceback.
-            pass
-    else:
-        logging.info("Starting server without auto-reloader.")
-        asyncio.run(main())
+    logging.info("Starting server.")
+    asyncio.run(main())
