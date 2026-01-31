@@ -2,7 +2,7 @@
 
 # Use an official Python runtime as a parent image for a lean final image.
 # Using an Alpine image significantly reduces the final image size.
-FROM python:3.11-alpine
+FROM python:3.13-alpine
 
 # Set environment variables to make Python run better inside Docker
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -22,6 +22,7 @@ RUN pip install --no-cache-dir -r requirements-server.txt
 # Copy the application source code into the container
 # This includes the server script, the core game logic module, and config.
 COPY server.py .
+COPY database_setup.py .
 COPY chronoclash_core/ ./chronoclash_core/
 COPY config.json .
 
@@ -36,6 +37,9 @@ EXPOSE 8888
 # 8889 for the status server
 EXPOSE 8889
 
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 # Define the command to run the application
 # We use --no-reload for production environments as the hupper reloader is for development
-CMD ["python", "server.py", "--no-reload"]
+ENTRYPOINT ["docker-entrypoint.sh"]

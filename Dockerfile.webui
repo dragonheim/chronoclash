@@ -2,7 +2,7 @@
 
 # Use an official Python runtime as a parent image for a lean final image.
 # Using an Alpine image significantly reduces the final image size.
-FROM python:3.11-alpine
+FROM python:3.13-alpine
 
 # Set environment variables to make Python run better inside Docker
 ENV PYTHONDONTWRITEBYTECODE=1

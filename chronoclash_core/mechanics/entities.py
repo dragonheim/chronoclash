@@ -2,6 +2,7 @@ import math
 from typing import Dict, List
 import asyncio
 from .constants import *
+from .constants import DAMAGE_TYPES
 from .effects import Effect
 from .equipment import Equipment
 from chronoclash_core.game_data import XP_FOR_LEVEL, MAX_LEVEL

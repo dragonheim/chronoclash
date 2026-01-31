@@ -112,7 +112,7 @@ This document outlines the product requirements for the initial release (Minimum
 ### 3.7. Technical Requirements
 
 *   **TR-3.7.1:** A server application must be developed to manage game state, character data, and network communication. The server must run in a Linux container and support up to 1000 concurrent players. The server will need to log all character and player interactions for diagnostic purposes.
-*   **TR-3.7.2:** A simple client application must be developed for players to connect to the server and interact with the game world. The client must run on Windows and Linux, using Unreal Engine 5.
+*   **TR-3.7.2:** A simple client application must be developed for players to connect to the server and interact with the game world. The client must run on Windows and Linux, using Godot Engine 4.6 with GDScript as the primary programming language.
 *   **TR-3.7.3:** Player data (character progression, inventory) must be saved, though initial implementation will use SQLite3.
 
 ## 4. Scope
@@ -142,7 +142,7 @@ This document outlines the product requirements for the initial release (Minimum
 *   Full questlines for all 9 factions (MVP will focus on initial interactions).
 *   Advanced NPC AI and boss mechanics.
 *   Additional zones (Neo-Babylon, Silicon Desert, etc.).
-*   Graphical client (initial client is simple Unreal Engine 5 with 3D assets).
+*   Graphical client (initial client is simple Godot Engine 4.6 with 3D assets).
 *   Improved database integration (e.g. MySQL / MariaDB).
 *   UI Customization and modding support.
 *   Monetization features.

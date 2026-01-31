@@ -34,8 +34,8 @@ def setup_database():
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT NOT NULL UNIQUE,
                 password_hash TEXT NOT NULL,
-                role INTEGER NOT NULL DEFAULT 20, -- 0=Admin, 10=GM, 20=Player
-                failed_login_attempts INTEGER NOT NULL DEFAULT 0,
+                role BIGINT NOT NULL DEFAULT 20, -- 0=Admin, 10=GM, 20=Player
+                failed_login_attempts BIGINT NOT NULL DEFAULT 0,
                 lockout_until TEXT, -- ISO 8601 format
                 is_locked BOOLEAN NOT NULL DEFAULT 0,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -47,20 +47,20 @@ def setup_database():
                 name TEXT NOT NULL UNIQUE,
                 description TEXT,
                 -- Future: Add level range, PvP status, etc.
-                required_level INTEGER NOT NULL DEFAULT 1
+                required_level BIGINT NOT NULL DEFAULT 1
             );
 
             -- Characters table to store player character data
             CREATE TABLE IF NOT EXISTS characters (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
+                user_id BIGINT NOT NULL,
                 name TEXT NOT NULL UNIQUE,
                 time_period TEXT NOT NULL,
                 archetype TEXT NOT NULL,
                 char_class_name TEXT NOT NULL,
-                level INTEGER NOT NULL DEFAULT 1,
-                experience INTEGER NOT NULL DEFAULT 0,
-                attribute_points INTEGER NOT NULL DEFAULT 0,
+                level BIGINT NOT NULL DEFAULT 1,
+                experience BIGINT NOT NULL DEFAULT 0,
+                attribute_points BIGINT NOT NULL DEFAULT 0,
                 current_hp REAL NOT NULL DEFAULT -1,
                 current_mana REAL NOT NULL DEFAULT -1,
                 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
@@ -70,7 +70,7 @@ def setup_database():
             CREATE TABLE IF NOT EXISTS npcs (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL UNIQUE,
-                zone_id INTEGER NOT NULL,
+                zone_id BIGINT NOT NULL,
                 dialogue TEXT,
                 role TEXT NOT NULL DEFAULT 'Civilian',
                 FOREIGN KEY (zone_id) REFERENCES zones (id)
@@ -82,22 +82,22 @@ def setup_database():
                 name TEXT NOT NULL UNIQUE,
                 archetype TEXT NOT NULL,
                 char_class_name TEXT NOT NULL,
-                agility INTEGER NOT NULL DEFAULT 10,
-                constitution INTEGER NOT NULL DEFAULT 10,
-                strength INTEGER NOT NULL DEFAULT 10,
-                intelligence INTEGER NOT NULL DEFAULT 10,
-                spirit INTEGER NOT NULL DEFAULT 10,
-                wisdom INTEGER NOT NULL DEFAULT 10
+                agility BIGINT NOT NULL DEFAULT 10,
+                constitution BIGINT NOT NULL DEFAULT 10,
+                strength BIGINT NOT NULL DEFAULT 10,
+                intelligence BIGINT NOT NULL DEFAULT 10,
+                spirit BIGINT NOT NULL DEFAULT 10,
+                wisdom BIGINT NOT NULL DEFAULT 10
             );
 
             -- Monster Spawns Table: Defines where monsters appear in the world.
             CREATE TABLE IF NOT EXISTS monster_spawns (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                monster_template_id INTEGER NOT NULL,
-                zone_id INTEGER NOT NULL,
-                level INTEGER NOT NULL DEFAULT 1,
+                monster_template_id BIGINT NOT NULL,
+                zone_id BIGINT NOT NULL,
+                level BIGINT NOT NULL DEFAULT 1,
                 category TEXT NOT NULL DEFAULT 'Common',
-                quantity INTEGER NOT NULL DEFAULT 1,
+                quantity BIGINT NOT NULL DEFAULT 1,
                 FOREIGN KEY (monster_template_id) REFERENCES monster_templates(id) ON DELETE CASCADE,
                 FOREIGN KEY (zone_id) REFERENCES zones (id),
                 UNIQUE(monster_template_id, zone_id)
@@ -110,7 +110,7 @@ def setup_database():
                 item_type TEXT NOT NULL, -- 'Weapon', 'Armor', 'Accessory'
                 slot TEXT NOT NULL, -- 'weapon', 'armor_body', 'accessory1', 'accessory2'
                 rarity TEXT NOT NULL DEFAULT 'Common',
-                level_req INTEGER NOT NULL DEFAULT 1,
+                level_req BIGINT NOT NULL DEFAULT 1,
                 -- JSON string for bonuses, e.g., '{"AP": 5, "HP": 10}'
                 bonuses TEXT,
                 -- JSON string for weapon damage, e.g., '{"min": 8, "max": 12, "type": "Bludgeoning"}'
@@ -121,9 +121,9 @@ def setup_database():
             -- Character Inventory table to link items to characters.
             CREATE TABLE IF NOT EXISTS character_inventory (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                character_id INTEGER NOT NULL,
-                item_id INTEGER NOT NULL,
-                quantity INTEGER NOT NULL DEFAULT 1,
+                character_id BIGINT NOT NULL,
+                item_id BIGINT NOT NULL,
+                quantity BIGINT NOT NULL DEFAULT 1,
                 is_equipped BOOLEAN NOT NULL DEFAULT 0,
                 FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE,
                 FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE
@@ -134,8 +134,8 @@ def setup_database():
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL UNIQUE,
                 type TEXT NOT NULL,
-                mana_cost INTEGER NOT NULL,
-                cooldown INTEGER NOT NULL,
+                mana_cost BIGINT NOT NULL,
+                cooldown BIGINT NOT NULL,
                 requires_combat BOOLEAN NOT NULL DEFAULT 0,
                 archetype_mods TEXT
             );

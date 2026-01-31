@@ -19,6 +19,14 @@ The current lore concept involves three time periods (Past, Present, Future) col
 
 ## Technology Stack
 
+*   **Language:** Python 3.13
+*   **Architecture:** 64-bit (explicitly using 64-bit integers for data storage).
+*   **Networking:** Asynchronous I/O using `asyncio`.
+*   **Database:** SQLite3 (configured with `BIGINT` for future-proofing and 64-bit range support).
+*   **Web Interface:** Flask for administrative and account management tasks.
+*   **Containerization:** Docker & Docker Compose for easy deployment.
+*   **Client (Separate Project):** Godot Engine 4.6 with GDScript.
+
 ## Getting Started
 
 ### Prerequisites
@@ -41,7 +49,7 @@ The current lore concept involves three time periods (Past, Present, Future) col
 *   **Chat System:** Allow players to communicate.
 *   **Improved Networking:** More robust serialization (e.g., Serde with Bincode/JSON), error handling, and security.
 *   **Spatial Partitioning:** Optimize updates for large numbers of players (e.g., quadtrees).
-*   **Graphical Client:** Eventually, a more visually appealing client (e.g., using Bevy, Fyrox, or a web client).
+*   **Graphical Client:** Eventually, a more visually appealing client using the Godot Engine with GDScript.
 *   **Server Scalability:** Explore strategies for handling more concurrent users.
 
 ## Contributing
